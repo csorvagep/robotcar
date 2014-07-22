@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 22/07/2014 13:22:33
+  * Date               : 23/07/2014 00:18:13
   * Description        : Main program body
   ******************************************************************************
   *
@@ -54,8 +54,9 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	//uint32_t currentPosition;
-	int8_t dutyDelta = -10;
+	uint32_t currentPosition;
+	int8_t dutyDelta = 0;
+	uint8_t direction = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -76,6 +77,7 @@ int main(void)
   MX_DMA_Init();
   MX_ADC1_Init();
   MX_TIM1_Init();
+  MX_TIM2_Init();
   MX_USART3_UART_Init();
 
   /* USER CODE BEGIN 2 */
@@ -85,13 +87,14 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET);
+	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
 
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN 3 */
 	/* Infinite loop */
 	while (1) {
-		HAL_Delay(100);
+		HAL_Delay(200);
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
 
 		//HAL_ADC_Start(&hadc1);
@@ -100,10 +103,22 @@ int main(void)
 		//	currentPosition = HAL_ADC_GetValue(&hadc1);
 		//}
 
-		htim1.Instance->CCR1 = 100 + dutyDelta++;
-		if(dutyDelta >= 10) {
-			dutyDelta = -10;
+		currentPosition = htim2.Instance->CNT;
+
+		if(direction) {
+			if(dutyDelta <= -30) {
+				direction = 0;
+			} else {
+				dutyDelta--;
+			}
+		} else {
+			if(dutyDelta >= 30) {
+				direction = 1;
+			} else {
+				dutyDelta++;
+			}
 		}
+		htim1.Instance->CCR1 = 100 + dutyDelta;
 	}
   /* USER CODE END 3 */
 
@@ -145,6 +160,7 @@ void SystemClock_Config(void)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_7);
+	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
 }
 
 /* USER CODE END 4 */
