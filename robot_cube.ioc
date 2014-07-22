@@ -1,5 +1,5 @@
 #MicroXplorer Configuration settings - do not modify
-#Tue Jul 22 13:05:42 CEST 2014
+#Tue Jul 22 13:22:31 CEST 2014
 ADC1.Channel-7\#ChannelRegularConversion=ADC_CHANNEL_9
 ADC1.IPParameters=NbrOfConversionFlag,SamplingTime-7\#ChannelRegularConversion,Rank-7\#ChannelRegularConversion,Channel-7\#ChannelRegularConversion,master
 ADC1.NbrOfConversionFlag=1
@@ -64,8 +64,12 @@ Mcu.PinsNb=14
 Mcu.UserName=STM32F407VGTx
 NVIC.DMA1_Stream1_IRQn=true\:0\:0
 NVIC.DMA1_Stream3_IRQn=true\:0\:0
+NVIC.EXTI0_IRQn=true\:0\:0
 NVIC.PriorityGroup=NVIC_PRIORITYGROUP_0
 NVIC.SysTick_IRQn=true\:0\:0
+PA0-WKUP.GPIOParameters=GPIO_PuPd,GPIO_ModeDefaultEXTI
+PA0-WKUP.GPIO_ModeDefaultEXTI=GPIO_MODE_IT_RISING
+PA0-WKUP.GPIO_PuPd=GPIO_NOPULL
 PA0-WKUP.Locked=true
 PA0-WKUP.Signal=GPXTI0
 PB1.GPIOParameters=GPIO_PuPd,GPIO_Label,GPIO_Mode

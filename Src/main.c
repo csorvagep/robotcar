@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 22/07/2014 13:05:43
+  * Date               : 22/07/2014 13:22:33
   * Description        : Main program body
   ******************************************************************************
   *
@@ -143,9 +143,9 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-//	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_7);
-//}
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_7);
+}
 
 /* USER CODE END 4 */
 

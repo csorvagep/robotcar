@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 22/07/2014 12:54:55
+  * Date               : 22/07/2014 13:05:43
   * Description        : Main program body
   ******************************************************************************
   *
@@ -34,7 +34,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "adc.h"
 #include "dma.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -72,14 +74,16 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
+  MX_ADC1_Init();
+  MX_TIM1_Init();
   MX_USART3_UART_Init();
 
   /* USER CODE BEGIN 2 */
 	BSP_BT_Init();
 
-	//htim1.Instance->CCR1 = 100;
-	//HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-	//HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+	htim1.Instance->CCR1 = 100;
+	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET);
 
   /* USER CODE END 2 */
@@ -96,7 +100,7 @@ int main(void)
 		//	currentPosition = HAL_ADC_GetValue(&hadc1);
 		//}
 
-		//htim1.Instance->CCR1 = 100 + dutyDelta++;
+		htim1.Instance->CCR1 = 100 + dutyDelta++;
 		if(dutyDelta >= 10) {
 			dutyDelta = -10;
 		}
@@ -139,9 +143,9 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-//	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_7);
-//}
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_7);
+}
 
 /* USER CODE END 4 */
 
