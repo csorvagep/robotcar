@@ -89,6 +89,7 @@ int main(void)
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET);
 	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
 
+
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN 3 */
