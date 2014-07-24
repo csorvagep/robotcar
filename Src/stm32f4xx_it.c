@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_it.c
-  * @date    24/07/2014 16:07:47
+  * @date    24/07/2014 19:27:26
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
@@ -39,6 +39,7 @@
 /* External variables --------------------------------------------------------*/
 
 extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim6;
 extern DMA_HandleTypeDef hdma_usart3_tx;
 extern DMA_HandleTypeDef hdma_usart3_rx;
 
@@ -54,6 +55,15 @@ void EXTI0_IRQHandler(void)
   HAL_NVIC_ClearPendingIRQ(EXTI0_IRQn);
   
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+}
+
+/**
+* @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
+*/
+void TIM6_DAC_IRQHandler(void)
+{
+  HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
+  HAL_TIM_IRQHandler(&htim6);
 }
 
 /**

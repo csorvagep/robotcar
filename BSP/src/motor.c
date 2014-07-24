@@ -14,6 +14,8 @@ static FunctionalState _enabled = DISABLE;
 static FunctionalState _backlash = ENABLE;
 static int8_t _speed = 0;
 
+extern TIM_HandleTypeDef htim1;
+
 /**
  * Initializes the motor driver module, and its variables.
  */

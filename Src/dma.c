@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : dma.c
-  * Date               : 24/07/2014 16:07:46
+  * Date               : 24/07/2014 19:27:25
   * Description        : This file provides code for the configuration
   *                      of all the requested memory to memory DMA transfers.
   ******************************************************************************

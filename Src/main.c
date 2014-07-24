@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 24/07/2014 16:07:47
+  * Date               : 24/07/2014 19:27:27
   * Description        : Main program body
   ******************************************************************************
   *
@@ -44,6 +44,10 @@
 
 /* USER CODE BEGIN 0 */
 #include "bluetooth.h"
+#include "encoder.h"
+#include "radio.h"
+#include "motor.h"
+
 #include <stdio.h>
 
 __IO uint32_t uwIC2Value = 0;
@@ -58,11 +62,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	//uint32_t currentPosition;
-	//int8_t dutyDelta = 0;
-	//uint8_t direction = 0;
-
-	char str_buff[128];
 
   /* USER CODE END 1 */
 
@@ -86,28 +85,22 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_TIM4_Init();
+  MX_TIM6_Init();
   MX_USART3_UART_Init();
 
   /* USER CODE BEGIN 2 */
 	BSP_BT_Init();
 	BSP_Motor_Init();
-
-	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
-
-	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_1);
-	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_3);
+	BSP_Radio_Init();
+	BSP_Encoder_Init();
 
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN 3 */
 	/* Infinite loop */
 	while (1) {
-		HAL_Delay(500);
+		HAL_Delay(1000);
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-
-		sprintf(str_buff, "%lu,%lu\r\n", uwIC1Value, uwIC2Value);
-		BSP_BT_SendStr(str_buff);
-		BSP_BT_Flush();
 
 		//HAL_ADC_Start(&hadc1);
 		//HAL_ADC_PollForConversion(&hadc1, 10);
@@ -115,22 +108,6 @@ int main(void)
 		//	currentPosition = HAL_ADC_GetValue(&hadc1);
 		//}
 
-//		currentPosition = htim2.Instance->CNT;
-//
-//		if(direction) {
-//			if(dutyDelta <= -30) {
-//				direction = 0;
-//			} else {
-//				dutyDelta--;
-//			}
-//		} else {
-//			if(dutyDelta >= 30) {
-//				direction = 1;
-//			} else {
-//				dutyDelta++;
-//			}
-//		}
-//		htim1.Instance->CCR1 = 100 + dutyDelta;
 	}
   /* USER CODE END 3 */
 
@@ -169,16 +146,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
-	if (htim->Instance == TIM4) {
-		if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1) {
-			uwIC1Value = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
-		} else if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3) {
-			uwIC2Value = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3) - uwIC1Value;
-		}
-	}
-}
 
 /* USER CODE END 4 */
 

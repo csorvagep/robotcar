@@ -14,7 +14,7 @@
 #define BACKLASH		3
 
 void BSP_Motor_Init(void);
-void BSP_Motor_SetSpeed(int8_t value);
+void BSP_Motor_SetSpeed(int16_t value);
 void BSP_Motor_SetState(FunctionalState state);
 
 #endif /* MOTOR_H_ */
