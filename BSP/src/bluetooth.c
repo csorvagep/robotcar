@@ -26,7 +26,7 @@ void BSP_BT_Init(void) {
 	HAL_UART_Receive_DMA(&huart3, rxBuff, BUFFER_SIZE);
 }
 
-void BSP_BT_SendStr(uint8_t *str) {
+void BSP_BT_SendStr(int8_t *str) {
 	while (*str) {
 		txCurrentBuff[txPosition++] = *str++;
 		if (txPosition >= BUFFER_SIZE) {
@@ -35,7 +35,7 @@ void BSP_BT_SendStr(uint8_t *str) {
 	}
 }
 
-uint8_t BSP_BT_ReceiveStr(uint8_t *buffer, uint8_t buffer_size) {
+uint8_t BSP_BT_ReceiveStr(int8_t *buffer, uint8_t buffer_size) {
 	uint8_t i = 0;
 	uint8_t currentPosition = (uint8_t)(BUFFER_SIZE - hdma_usart3_rx.Instance->NDTR);
 

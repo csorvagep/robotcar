@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 23/07/2014 00:18:13
+  * Date               : 24/07/2014 16:07:47
   * Description        : Main program body
   ******************************************************************************
   *
@@ -44,6 +44,10 @@
 
 /* USER CODE BEGIN 0 */
 #include "bluetooth.h"
+#include <stdio.h>
+
+__IO uint32_t uwIC2Value = 0;
+__IO uint32_t uwIC1Value = 0;
 
 /* USER CODE END 0 */
 
@@ -54,9 +58,12 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	uint32_t currentPosition;
-	int8_t dutyDelta = 0;
-	uint8_t direction = 0;
+	//uint32_t currentPosition;
+	//int8_t dutyDelta = 0;
+	//uint8_t direction = 0;
+
+	char str_buff[128];
+
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -78,6 +85,7 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
+  MX_TIM4_Init();
   MX_USART3_UART_Init();
 
   /* USER CODE BEGIN 2 */
@@ -89,14 +97,20 @@ int main(void)
 	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET);
 	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
 
+	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_1);
+	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_3);
 
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN 3 */
 	/* Infinite loop */
 	while (1) {
-		HAL_Delay(200);
+		HAL_Delay(500);
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+
+		sprintf(str_buff, "%lu,%lu\r\n", uwIC1Value, uwIC2Value);
+		BSP_BT_SendStr(str_buff);
+		BSP_BT_Flush();
 
 		//HAL_ADC_Start(&hadc1);
 		//HAL_ADC_PollForConversion(&hadc1, 10);
@@ -104,22 +118,22 @@ int main(void)
 		//	currentPosition = HAL_ADC_GetValue(&hadc1);
 		//}
 
-		currentPosition = htim2.Instance->CNT;
-
-		if(direction) {
-			if(dutyDelta <= -30) {
-				direction = 0;
-			} else {
-				dutyDelta--;
-			}
-		} else {
-			if(dutyDelta >= 30) {
-				direction = 1;
-			} else {
-				dutyDelta++;
-			}
-		}
-		htim1.Instance->CCR1 = 100 + dutyDelta;
+//		currentPosition = htim2.Instance->CNT;
+//
+//		if(direction) {
+//			if(dutyDelta <= -30) {
+//				direction = 0;
+//			} else {
+//				dutyDelta--;
+//			}
+//		} else {
+//			if(dutyDelta >= 30) {
+//				direction = 1;
+//			} else {
+//				dutyDelta++;
+//			}
+//		}
+//		htim1.Instance->CCR1 = 100 + dutyDelta;
 	}
   /* USER CODE END 3 */
 
@@ -162,6 +176,16 @@ void SystemClock_Config(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
 	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_7);
 	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+}
+
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
+	if (htim->Instance == TIM4) {
+		if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1) {
+			uwIC1Value = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+		} else if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3) {
+			uwIC2Value = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3) - uwIC1Value;
+		}
+	}
 }
 
 /* USER CODE END 4 */
