@@ -90,11 +90,8 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 	BSP_BT_Init();
+	BSP_Motor_Init();
 
-	htim1.Instance->CCR1 = 100;
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-	HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET);
 	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_1);
 
 	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_1);
@@ -172,11 +169,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_7);
-	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
-}
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 	if (htim->Instance == TIM4) {
