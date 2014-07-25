@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : TIM.c
-  * Date               : 24/07/2014 19:27:25
+  * Date               : 25/07/2014 08:41:12
   * Description        : This file provides code for the configuration
   *                      of the TIM instances.
   ******************************************************************************
@@ -119,6 +119,7 @@ void MX_TIM4_Init(void)
 {
 
   TIM_IC_InitTypeDef sConfigIC;
+  TIM_OC_InitTypeDef sConfigOC;
   TIM_SlaveConfigTypeDef sSlaveConfig;
   TIM_MasterConfigTypeDef sMasterConfig;
 
@@ -130,6 +131,8 @@ void MX_TIM4_Init(void)
   HAL_TIM_Base_Init(&htim4);
 
   HAL_TIM_IC_Init(&htim4);
+
+  HAL_TIM_PWM_Init(&htim4);
 
   sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;
   sConfigIC.ICSelection = TIM_ICSELECTION_INDIRECTTI;
@@ -143,6 +146,12 @@ void MX_TIM4_Init(void)
 
   sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;
   HAL_TIM_IC_ConfigChannel(&htim4, &sConfigIC, TIM_CHANNEL_3);
+
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 1500;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_4);
 
   sSlaveConfig.SlaveMode = TIM_SLAVEMODE_RESET;
   sSlaveConfig.InputTrigger = TIM_TS_TI2FP2;
@@ -229,9 +238,17 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
     __TIM4_CLK_ENABLE();
   
     /**TIM4 GPIO Configuration    
+    PD15     ------> TIM4_CH4
     PB7     ------> TIM4_CH2
     PB8     ------> TIM4_CH3 
     */
+    GPIO_InitStruct.Pin = GPIO_PIN_15;
+    GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
+    GPIO_InitStruct.Alternate = GPIO_AF2_TIM4;
+    HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
     GPIO_InitStruct.Pin = GPIO_PIN_7|GPIO_PIN_8;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -301,9 +318,12 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* htim_base)
     __TIM4_CLK_DISABLE();
   
     /**TIM4 GPIO Configuration    
+    PD15     ------> TIM4_CH4
     PB7     ------> TIM4_CH2
     PB8     ------> TIM4_CH3 
     */
+    HAL_GPIO_DeInit(GPIOD, GPIO_PIN_15);
+
     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_7|GPIO_PIN_8);
 
     /* Peripheral interrupt Deinit*/

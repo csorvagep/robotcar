@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 24/07/2014 19:27:27
+  * Date               : 25/07/2014 08:41:14
   * Description        : Main program body
   ******************************************************************************
   *
@@ -62,7 +62,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	uint16_t currentPosition;
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -94,6 +94,8 @@ int main(void)
 	BSP_Radio_Init();
 	BSP_Encoder_Init();
 
+	BSP_Radio_ConnectServo(ENABLE);
+
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN 3 */
@@ -102,11 +104,11 @@ int main(void)
 		HAL_Delay(1000);
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
 
-		//HAL_ADC_Start(&hadc1);
-		//HAL_ADC_PollForConversion(&hadc1, 10);
-		//if(HAL_ADC_GetState(&hadc1) == HAL_ADC_STATE_EOC_REG) {
-		//	currentPosition = HAL_ADC_GetValue(&hadc1);
-		//}
+		HAL_ADC_Start(&hadc1);
+		HAL_ADC_PollForConversion(&hadc1, 10);
+		if(HAL_ADC_GetState(&hadc1) == HAL_ADC_STATE_EOC_REG) {
+			currentPosition = HAL_ADC_GetValue(&hadc1);
+		}
 
 	}
   /* USER CODE END 3 */

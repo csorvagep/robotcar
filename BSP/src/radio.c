@@ -10,6 +10,9 @@
 static __IO uint32_t uwIC2Value = 0;
 static __IO uint32_t uwIC1Value = 0;
 
+static __IO uint32_t uwOCValue = 1500;
+static FunctionalState _connected = DISABLE;
+
 extern TIM_HandleTypeDef htim4;
 
 /**
@@ -21,6 +24,8 @@ void BSP_Radio_Init(void) {
 
 	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_1);
 	HAL_TIM_IC_Start_IT(&htim4, TIM_CHANNEL_3);
+
+	HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
 }
 
 /**
@@ -39,6 +44,15 @@ int16_t BSP_Radio_GetMotor(void) {
 	return (int16_t)(uwIC2Value - 1500);
 }
 
+void BSP_Radio_SetSteer(int16_t value) {
+	uwOCValue = 1500 + value;
+}
+
+void BSP_Radio_ConnectServo(FunctionalState state) {
+	_connected = state;
+}
+
+
 /**
  * Callback function implementation.
  * @param htim timer handle which trigger the callback
@@ -49,6 +63,9 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 			uwIC1Value = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
 		} else if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_3) {
 			uwIC2Value = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3) - uwIC1Value;
+			if(_connected == ENABLE) {
+				htim4.Instance->CCR4 = uwIC2Value;
+			}
 		}
 	}
 }
