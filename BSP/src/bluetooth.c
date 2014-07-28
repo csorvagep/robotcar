@@ -26,8 +26,17 @@ void BSP_BT_Init(void) {
 	HAL_UART_Receive_DMA(&huart3, rxBuff, BUFFER_SIZE);
 }
 
-void BSP_BT_SendStr(int8_t *str) {
+void BSP_BT_SendStr(char *str) {
 	while (*str) {
+		txCurrentBuff[txPosition++] = *str++;
+		if (txPosition >= BUFFER_SIZE) {
+			BSP_BT_Flush();
+		}
+	}
+}
+
+void BSP_BT_SendChars(char *str, size_t len) {
+	while (len--) {
 		txCurrentBuff[txPosition++] = *str++;
 		if (txPosition >= BUFFER_SIZE) {
 			BSP_BT_Flush();

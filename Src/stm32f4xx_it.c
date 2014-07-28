@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_it.c
-  * @date    25/07/2014 08:41:13
+  * @date    27/07/2014 18:12:53
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
@@ -37,6 +37,8 @@
 #include "stm32f4xx_it.h"
 
 /* External variables --------------------------------------------------------*/
+ 
+extern void xPortSysTickHandler(void);
 
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim6;
@@ -46,6 +48,24 @@ extern DMA_HandleTypeDef hdma_usart3_rx;
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
+
+/**
+* @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
+*/
+void TIM6_DAC_IRQHandler(void)
+{
+  HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
+  HAL_TIM_IRQHandler(&htim6);
+}
+
+/**
+* @brief This function handles DMA1 Stream3 global interrupt.
+*/
+void DMA1_Stream3_IRQHandler(void)
+{
+  HAL_NVIC_ClearPendingIRQ(DMA1_Stream3_IRQn);
+  HAL_DMA_IRQHandler(&hdma_usart3_tx);
+}
 
 /**
 * @brief This function handles EXTI Line0 interrupt.
@@ -58,30 +78,12 @@ void EXTI0_IRQHandler(void)
 }
 
 /**
-* @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
-*/
-void TIM6_DAC_IRQHandler(void)
-{
-  HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
-  HAL_TIM_IRQHandler(&htim6);
-}
-
-/**
 * @brief This function handles System tick timer.
 */
 void SysTick_Handler(void)
 {
+  xPortSysTickHandler();
   HAL_IncTick();
-  HAL_SYSTICK_IRQHandler();
-}
-
-/**
-* @brief This function handles DMA1 Stream3 global interrupt.
-*/
-void DMA1_Stream3_IRQHandler(void)
-{
-  HAL_NVIC_ClearPendingIRQ(DMA1_Stream3_IRQn);
-  HAL_DMA_IRQHandler(&hdma_usart3_tx);
 }
 
 /**

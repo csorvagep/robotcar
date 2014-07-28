@@ -14,6 +14,7 @@ void BSP_Radio_Init(void);
 int16_t BSP_Radio_GetSteer(void);
 int16_t BSP_Radio_GetMotor(void);
 void BSP_Radio_SetSteer(int16_t value);
+void BSP_Radio_ServoStatus(FunctionalState state);
 void BSP_Radio_ConnectServo(FunctionalState state);
 
 #endif /* RADIO_H_ */

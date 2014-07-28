@@ -10,7 +10,7 @@
 
 #include "stm32f4xx.h"
 
-#define SPEED_MAX		95
+#define SPEED_MAX		75
 #define BACKLASH		3
 
 void BSP_Motor_Init(void);
