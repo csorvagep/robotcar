@@ -47,14 +47,13 @@
 #include "encoder.h"
 #include "radio.h"
 #include "motor.h"
+#include "sensor.h"
 
 #include <stdio.h>
 
 #include "communication.h"
+#include "motorcontrol.h"
 
-uint32_t adcData[10];
-uint32_t sumMotor;
-uint32_t sumCirc;
 /* USER CODE END 0 */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,9 +63,6 @@ static void StartThread(void const * argument);
 int main(void) {
 
 	/* USER CODE BEGIN 1 */
-	int16_t currentPosition;
-	char buffer[128];
-	uint8_t i;
 
 	/* USER CODE END 1 */
 
@@ -94,15 +90,13 @@ int main(void) {
 	MX_USART3_UART_Init();
 
 	/* USER CODE BEGIN 2 */
-	BSP_BT_Init();
 	BSP_Motor_Init();
 	BSP_Radio_Init();
 	BSP_Encoder_Init();
+	BSP_Sensor_Init();
 
-	//BSP_Radio_ConnectServo(ENABLE);
-	//BSP_Radio_ServoStatus(ENABLE);
-
-	HAL_ADC_Start_DMA(&hadc1, adcData, 10);
+	BSP_Radio_ConnectServo(ENABLE);
+	BSP_Radio_ServoStatus(ENABLE);
 
 	/* USER CODE END 2 */
 
@@ -181,9 +175,13 @@ static void StartThread(void const * argument __attribute__((unused))) {
 			configMINIMAL_STACK_SIZE);
 	osThreadCreate(osThread(COMM_Thread), NULL);
 
+	osThreadDef(MOTOR_Thread, MotorThread, osPriorityNormal, 0,
+			configMINIMAL_STACK_SIZE);
+	osThreadCreate(osThread(MOTOR_Thread), NULL);
+
 	/* Infinite loop */
 	for (;;) {
-		osDelay(1000);
+		osDelay(100);
 
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
 
@@ -197,26 +195,12 @@ static void StartThread(void const * argument __attribute__((unused))) {
 
 		BSP_Motor_SetSpeed(currentPosition);
 
-		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+		vbatm = BSP_Sensor_GetVBATM() * 9000 / 4096;
+		vbate = BSP_Sensor_GetVBATE() * 9000 / 4096;
 
-		sumCirc = 0;
-		sumMotor = 0;
-
-		for (i = 0; i < 5; i++) {
-			sumCirc += adcData[i * 2];
-			sumMotor += adcData[i * 2 + 1];
-		}
-
-		sumCirc /= 5;
-		sumMotor /= 5;
-
-		vbatm = sumMotor * 9000 / 4096;
-		vbate = sumCirc * 9000 / 4096;
-
-//		sprintf(buffer, "%lu,%lu\r\n", vbate, vbatm);
-//		BSP_BT_SendStr(buffer);
-//		BSP_BT_Flush();
-		printf("%d,%d\r\n", BSP_Radio_GetMotor(), BSP_Radio_GetSteer());
+		printf("%lu,%lu\r\n", vbate, vbatm);
+//		printf("%d,%d\r\n", BSP_Radio_GetMotor(), BSP_Radio_GetSteer());
+//		printf("%d\r\n", BSP_Encoder_GetVelocity());
 	}
 
 	/* USER CODE END 5 */

@@ -8,13 +8,13 @@
 #include "communication.h"
 
 #include "bluetooth.h"
-//#include "radio.h"
-//#include <stdio.h>
 
 static osMutexId sendMutex = NULL;
 
 void CommThread(void const * argument __attribute__((unused))) {
 	uint32_t previousWakeTime = osKernelSysTick();
+
+	BSP_BT_Init();
 
 	sendMutex = osMutexCreate(NULL);
 	configASSERT(sendMutex);
@@ -27,7 +27,6 @@ void CommThread(void const * argument __attribute__((unused))) {
 			BSP_BT_Flush();
 			osMutexRelease(sendMutex);
 		}
-		//printf("%d,%d\r\n", BSP_Radio_GetMotor(), BSP_Radio_GetSteer());
 	}
 }
 
