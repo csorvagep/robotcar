@@ -12,7 +12,7 @@
 
 static FunctionalState _enabled = DISABLE;
 static FunctionalState _backlash = ENABLE;
-static int8_t _speed = 0;
+static int16_t _speed = 0;
 
 extern TIM_HandleTypeDef htim1;
 
@@ -21,7 +21,7 @@ extern TIM_HandleTypeDef htim1;
  */
 void BSP_Motor_Init(void)
 {
-	htim1.Instance->CCR1 = 100;
+	htim1.Instance->CCR1 = MIDDLE_VAL;
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
 	DISABLE_MOTOR();
@@ -53,7 +53,7 @@ void BSP_Motor_SetSpeed(int16_t speed)
 				ENABLE_MOTOR();
 			}
 		}
-		htim1.Instance->CCR1 = 100 + _speed;
+		htim1.Instance->CCR1 = MIDDLE_VAL + _speed;
 	}
 }
 

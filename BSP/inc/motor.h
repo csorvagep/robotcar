@@ -10,8 +10,9 @@
 
 #include "stm32f4xx.h"
 
-#define SPEED_MAX		75
-#define BACKLASH		3
+#define SPEED_MAX		200
+#define BACKLASH		5
+#define MIDDLE_VAL		250
 
 void BSP_Motor_Init(void);
 void BSP_Motor_SetSpeed(int16_t value);
