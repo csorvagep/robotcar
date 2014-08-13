@@ -7,6 +7,8 @@
 
 #include "encoder.h"
 
+#include "radio.h"
+
 static int32_t _total = 0;
 static int16_t _velo = 0;
 

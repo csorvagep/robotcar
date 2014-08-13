@@ -58,6 +58,39 @@ uint8_t BSP_BT_ReceiveStr(int8_t *buffer, uint8_t buffer_size) {
 	return i;
 }
 
+uint8_t BSP_BT_ReceiveStrNL(char *buffer, uint8_t buffer_size) {
+	uint8_t cr = 0, lf = 0;
+	uint8_t i = 0;
+
+	uint32_t currentPosition = (uint8_t)(BUFFER_SIZE - hdma_usart3_rx.Instance->NDTR);
+	uint32_t position = rxPosition;
+	uint8_t isOVF = rxOverflow;
+
+	/* Go through the buffer, looking for a '\r\n' combination. */
+	while((isOVF || position != currentPosition) && i < buffer_size && !lf) {
+		if(cr && rxBuff[position] == '\n') {
+			lf = 1;
+		} else if(cr && rxBuff[position] != '\n') {
+			cr = 0;
+		} else if(rxBuff[position] == '\r') {
+			cr = 1;
+		}
+		position++;
+		i++;
+
+		if(position >= BUFFER_SIZE) {
+			isOVF = 0;
+			position = 0;
+		}
+	}
+
+	if(lf) {
+		return BSP_BT_ReceiveStr(buffer, i);
+	} else {
+		return 0;
+	}
+}
+
 void BSP_BT_Flush(void) {
 	HAL_UART_Transmit_DMA(&huart3, txCurrentBuff, txPosition);
 	txPosition = 0;

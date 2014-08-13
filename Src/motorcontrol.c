@@ -16,17 +16,20 @@
 void MotorThread(void const * argument __attribute__((unused))) {
 	uint32_t previousWakeTime = osKernelSysTick();
 	uint8_t once = 1;
+	uint8_t i = 0;
 
 	int32_t ek = 0, ik = 0, y = 0;
 
-	for(;;) {
-		osDelayUntil(&previousWakeTime, 20);
+	for (;;) {
+		osDelayUntil(&previousWakeTime, 100);
 
-		printf("ek: %ld ik: %ld yk:%ld\r\n", ek, ik, y);
-//		printf("p: %ld\r\n", BSP_Encoder_GetPosition());
+		if (i++ > 5) {
+			printf("ek: %ld ik: %ld yk: %ld\r\n", ek, ik, y);
+			i = 0;
+		}
 
-		if(BSP_Radio_GetMotor() > 100) {
-			if(!once) {
+		/*if (BSP_Radio_GetMotor() > 100) {
+			if (!once) {
 				once = 1;
 				BSP_Motor_SetState(ENABLE);
 			}
@@ -36,12 +39,16 @@ void MotorThread(void const * argument __attribute__((unused))) {
 			ik += (ek >> 4);
 			BSP_Motor_SetSpeed(ik);
 		} else {
-			if(once) {
+			if (once) {
 				once = 0;
 				BSP_Motor_SetState(DISABLE);
 				ik = 0;
 			}
 		}
+		*/
 
+		ek = BSP_Radio_GetMotor();
+		ek >>= 2;
+		BSP_Motor_SetSpeed(ek);
 	}
 }
