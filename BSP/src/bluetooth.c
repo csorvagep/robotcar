@@ -7,14 +7,15 @@
 
 #include "bluetooth.h"
 
-#define BUFFER_SIZE 128
+#define RX_BUFFER_SIZE 64
+#define TX_BUFFER_SIZE 256
 
 uint32_t rxPosition = 0;
 __IO ITStatus rxOverflow = RESET;
-uint8_t rxBuff[BUFFER_SIZE];
+uint8_t rxBuff[RX_BUFFER_SIZE];
 
-uint8_t txBuff1[BUFFER_SIZE];
-uint8_t txBuff2[BUFFER_SIZE];
+uint8_t txBuff1[TX_BUFFER_SIZE];
+uint8_t txBuff2[TX_BUFFER_SIZE];
 uint16_t txPosition = 0;
 
 uint8_t *txCurrentBuff = txBuff1;
@@ -23,13 +24,13 @@ extern DMA_HandleTypeDef hdma_usart3_rx;
 
 /* Public functions */
 void BSP_BT_Init(void) {
-	HAL_UART_Receive_DMA(&huart3, rxBuff, BUFFER_SIZE);
+	HAL_UART_Receive_DMA(&huart3, rxBuff, RX_BUFFER_SIZE);
 }
 
 void BSP_BT_SendStr(char *str) {
 	while (*str) {
 		txCurrentBuff[txPosition++] = *str++;
-		if (txPosition >= BUFFER_SIZE) {
+		if (txPosition >= TX_BUFFER_SIZE) {
 			BSP_BT_Flush();
 		}
 	}
@@ -38,19 +39,19 @@ void BSP_BT_SendStr(char *str) {
 void BSP_BT_SendChars(char *str, size_t len) {
 	while (len--) {
 		txCurrentBuff[txPosition++] = *str++;
-		if (txPosition >= BUFFER_SIZE) {
+		if (txPosition >= TX_BUFFER_SIZE) {
 			BSP_BT_Flush();
 		}
 	}
 }
 
-uint8_t BSP_BT_ReceiveStr(int8_t *buffer, uint8_t buffer_size) {
+uint8_t BSP_BT_ReceiveStr(char *buffer, uint8_t buffer_size) {
 	uint8_t i = 0;
-	uint8_t currentPosition = (uint8_t)(BUFFER_SIZE - hdma_usart3_rx.Instance->NDTR);
+	uint8_t currentPosition = (uint8_t)(RX_BUFFER_SIZE - hdma_usart3_rx.Instance->NDTR);
 
 	while((rxOverflow == SET || rxPosition != currentPosition) && i < buffer_size) {
 		buffer[i++] = rxBuff[rxPosition++];
-		if(rxPosition >= BUFFER_SIZE) {
+		if(rxPosition >= RX_BUFFER_SIZE) {
 			rxOverflow = RESET;
 			rxPosition = 0;
 		}
@@ -62,7 +63,7 @@ uint8_t BSP_BT_ReceiveStrNL(char *buffer, uint8_t buffer_size) {
 	uint8_t cr = 0, lf = 0;
 	uint8_t i = 0;
 
-	uint32_t currentPosition = (uint8_t)(BUFFER_SIZE - hdma_usart3_rx.Instance->NDTR);
+	uint32_t currentPosition = (uint8_t)(RX_BUFFER_SIZE - hdma_usart3_rx.Instance->NDTR);
 	uint32_t position = rxPosition;
 	uint8_t isOVF = rxOverflow;
 
@@ -78,7 +79,7 @@ uint8_t BSP_BT_ReceiveStrNL(char *buffer, uint8_t buffer_size) {
 		position++;
 		i++;
 
-		if(position >= BUFFER_SIZE) {
+		if(position >= RX_BUFFER_SIZE) {
 			isOVF = 0;
 			position = 0;
 		}

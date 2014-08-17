@@ -35,6 +35,7 @@ void CommThread(void const * argument __attribute__((unused))) {
 
 	BSP_BT_SendStr("AT+AB Bypass\r\n");
 	BSP_BT_Flush();
+	BSP_BT_SetLed();
 
 	for (;;) {
 		osDelayUntil(&previousWakeTime, 50);
@@ -49,11 +50,18 @@ void CommThread(void const * argument __attribute__((unused))) {
 				BSP_BT_Flush();
 				osMutexRelease(sendMutex);
 			}
-		} else if (!Connected && SPPTry == RESET && cnt++ > 200) {
-			BSP_BT_SendStr(connectString);
-			BSP_BT_Flush();
-			cnt = 0;
-			SPPTry = SET;
+		} else if (!Connected && SPPTry == RESET) {
+
+			if(!(cnt % 10)) {
+				BSP_BT_ToggleLed();
+			}
+
+			if (++cnt > 160) {
+				BSP_BT_SendStr(connectString);
+				BSP_BT_Flush();
+				cnt = 0;
+				SPPTry = SET;
+			}
 		}
 	}
 }
@@ -86,6 +94,7 @@ void ProcessATAB(void) {
 			BypassMode = RESET;
 		} else if (!strncmp(internalBuffer + 6, "ConnectionUp", 12)) {
 			Connected = SET;
+			SPPTry = RESET;
 			BSP_BT_SetLed();
 		} else if (!strncmp(internalBuffer + 6, "-BypassMode-", 12)) {
 			BypassMode = SET;

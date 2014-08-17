@@ -16,7 +16,7 @@
 void BSP_BT_Init(void);
 void BSP_BT_SendStr(char *str);
 void BSP_BT_SendChars(char *str, size_t len);
-uint8_t BSP_BT_ReceiveStr(int8_t *buffer, uint8_t buffer_size);
+uint8_t BSP_BT_ReceiveStr(char *buffer, uint8_t buffer_size);
 uint8_t BSP_BT_ReceiveStrNL(char *buffer, uint8_t buffer_size);
 void BSP_BT_Flush(void);
 void BSP_BT_SetLed(void);

@@ -21,10 +21,10 @@ void MotorThread(void const * argument __attribute__((unused))) {
 	int32_t ek = 0, ik = 0, y = 0;
 
 	for (;;) {
-		osDelayUntil(&previousWakeTime, 100);
+		osDelayUntil(&previousWakeTime, 50);
 
-		if (i++ > 5) {
-			printf("ek: %ld ik: %ld yk: %ld\r\n", ek, ik, y);
+		if (++i > 5) {
+			printf("M,%ld,%ld,%ld\r\n", ek, ik, y);
 			i = 0;
 		}
 

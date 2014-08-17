@@ -35,7 +35,10 @@ void BSP_Radio_Init(void) {
  * @return Value can be between -500 and 500
  */
 int16_t BSP_Radio_GetSteer(void) {
-	return uwIC2Value - 1500;
+	if (_signalDetected == SET)
+		return uwIC2Value - 1500;
+	else
+		return 0;
 }
 
 /**
@@ -43,7 +46,10 @@ int16_t BSP_Radio_GetSteer(void) {
  * @return Value can be between -500 and 500
  */
 int16_t BSP_Radio_GetMotor(void) {
-	return uwIC1Value - 1500;
+	if (_signalDetected == SET)
+		return uwIC1Value - 1500;
+	else
+		return 0;
 }
 
 void BSP_Radio_SetSteer(int16_t value) {
@@ -99,7 +105,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 			if (!steerRise && _signalDetected == SET) {
 				_signalDetected = RESET;
 				HAL_TIM_PWM_Stop(&htim4, TIM_CHANNEL_4);
-			} else if(steerRise) {
+			} else if (steerRise) {
 				steerRise = 0;
 			}
 		}
