@@ -53,7 +53,14 @@ int16_t BSP_Radio_GetMotor(void) {
 }
 
 void BSP_Radio_SetSteer(int16_t value) {
+	value += SERVO_OFFSET;
+	if(value > SERVO_MAX) {
+		value = SERVO_MAX;
+	} else if(value < SERVO_MIN) {
+		value = SERVO_MIN;
+	}
 	uwOCValue = 1500 + value;
+	htim4.Instance->CCR4 = uwOCValue;
 }
 
 void BSP_Radio_ServoStatus(FunctionalState state) {
@@ -97,7 +104,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
 
 			/* Connect to servo output */
 			if (_connected == ENABLE) {
-				htim4.Instance->CCR4 = uwIC2Value;
+				BSP_Radio_SetSteer(uwIC2Value - 1500);
 			}
 		} else if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_2) {
 

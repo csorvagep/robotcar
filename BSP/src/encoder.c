@@ -54,7 +54,7 @@ void BSP_Encoder_Reset(void) {
 }
 
 /**
- * Callback function for periodical check, and measure velocity
+ * Callback function for periodical check, and measure velocity in every 10ms
  * @param htim Timer handle to determinate the trigger.
  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {

@@ -10,6 +10,10 @@
 
 #include "stm32f4xx.h"
 
+#define SERVO_MAX		570
+#define SERVO_MIN		-250
+#define SERVO_OFFSET	160
+
 void BSP_Radio_Init(void);
 int16_t BSP_Radio_GetSteer(void);
 int16_t BSP_Radio_GetMotor(void);

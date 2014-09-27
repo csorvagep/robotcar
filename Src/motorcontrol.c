@@ -13,42 +13,92 @@
 
 #include <stdio.h>
 
+#define MAX_OUTPUT	450
+#define MIN_OUTPUT	-450
+
+#define LOOKUP_MAX	6
+static const int16_t lookUpUMax[LOOKUP_MAX] = { 48, 94, 177, 251, 325, 390 };
+static const int16_t lookUpYMax[LOOKUP_MAX] = { 50, 70, 95, 120, 145, 170 };
+static const float lookUpKMax[LOOKUP_MAX] = { 0.434783, 0.301205, 0.337838, 0.337838, 0.384615, 0.384615 };
+#define ZD 			0.992f
+#define KC			2.4851f //Tcl = 500ms
+
+static int16_t ref = 70;
+static osMutexId refMutex = NULL;
+
+int32_t calculateU(int32_t uv);
+
+int32_t calculateU(int32_t uv) {
+	uint8_t i = 0;
+	int8_t sign = 1;
+
+	if(uv < 0) {
+		sign = -1;
+		uv *= -1;
+	}
+
+	while(i < LOOKUP_MAX && lookUpUMax[i] < uv) {
+		i++;
+	}
+
+	if(i == 0) {
+		uv = lookUpYMax[0];
+	} else {
+		uv = (int32_t)(lookUpKMax[i - 1] * (uv - lookUpUMax[i - 1]) + lookUpYMax[i - 1] + 0.5);
+	}
+
+	return uv * sign;
+}
+
 void MotorThread(void const * argument __attribute__((unused))) {
 	uint32_t previousWakeTime = osKernelSysTick();
-	uint8_t once = 1;
-	uint8_t i = 0;
+	uint8_t once = 1, i = 0;
+	float ek = 0, uc1 = 0, uc2 = 0, uc = 0;
+	int32_t uk = 0, u = 0;
 
-	int32_t ek = 0, ik = 0, y = 0;
+	refMutex = osMutexCreate(NULL);
+	configASSERT(refMutex);
 
 	for (;;) {
-		osDelayUntil(&previousWakeTime, 50);
+		osDelayUntil(&previousWakeTime, 10);
 
-		if (++i > 5) {
-			printf("M,%ld,%ld,%ld\r\n", ek, ik, y);
-			i = 0;
-		}
-
-		/*if (BSP_Radio_GetMotor() > 100) {
+		/* Dead man switch check */
+		if (BSP_Radio_GetMotor() > 100 && ref != 0) {
 			if (!once) {
 				once = 1;
 				BSP_Motor_SetState(ENABLE);
 			}
 
-			y = BSP_Encoder_GetVelocity();
-			ek = 75 - y;
-			ik += (ek >> 4);
-			BSP_Motor_SetSpeed(ik);
+			ek = ref - BSP_Encoder_GetVelocity();
+			uc2 = uc2 * ZD + (1 - ZD) * uk;
+			uc1 = KC * ek;
+			uc = uc1 + uc2;
+			if(uc > MAX_OUTPUT) {
+				uk = MAX_OUTPUT;
+			} else if(uc < MIN_OUTPUT) {
+				uk = MIN_OUTPUT;
+			} else {
+				uk = (int32_t)uc;
+			}
+
+			u = calculateU(uk);
+			BSP_Motor_SetSpeed(u);
 		} else {
 			if (once) {
 				once = 0;
 				BSP_Motor_SetState(DISABLE);
-				ik = 0;
+				ek = 0;
+				uc1 = 0;
+				uc2 = 0;
+				uc = 0;
+				uk = 0;
+				u = 0;
 			}
 		}
-		*/
 
-		ek = BSP_Radio_GetMotor();
-		ek >>= 2;
-		BSP_Motor_SetSpeed(ek);
+		if (++i > 10) {
+			printf("M,%ld,%ld,%d\r\n", (int32_t)ek, u, BSP_Encoder_GetVelocity());
+			i = 0;
+		}
 	}
 }

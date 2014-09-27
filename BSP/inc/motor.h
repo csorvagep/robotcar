@@ -11,11 +11,11 @@
 #include "stm32f4xx.h"
 
 #define SPEED_MAX		200
-#define BACKLASH		5
+#define BACKLASH		20
 #define MIDDLE_VAL		250
 
 void BSP_Motor_Init(void);
-void BSP_Motor_SetSpeed(int16_t value);
+void BSP_Motor_SetSpeed(int32_t value);
 void BSP_Motor_SetState(FunctionalState state);
 
 #endif /* MOTOR_H_ */

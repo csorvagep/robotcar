@@ -154,7 +154,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin __attribute__((unused))) {
 	static FunctionalState enabled = DISABLE;
 	enabled = !enabled;
 	BSP_Motor_SetState(enabled);
-	HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
 }
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask __attribute__((unused)),
@@ -173,7 +172,7 @@ static void StartThread(void const * argument __attribute__((unused))) {
 	osThreadCreate(osThread(COMM_Thread), NULL);
 
 	/* Motor controller thread */
-	osThreadDef(MOTOR_Thread, MotorThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
+	osThreadDef(MOTOR_Thread, MotorThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 20);
 	osThreadCreate(osThread(MOTOR_Thread), NULL);
 
 	osThreadDef(ANALOG_Thread, AnalogThread, osPriorityBelowNormal, 0, configMINIMAL_STACK_SIZE);

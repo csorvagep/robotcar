@@ -7,8 +7,15 @@
 
 #include "motor.h"
 
-#define ENABLE_MOTOR()		HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET)
-#define DISABLE_MOTOR()		HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET)
+#define ENABLE_MOTOR()		do {														\
+								HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET);		\
+								HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);	\
+							} while(0)
+
+#define DISABLE_MOTOR()		do {														\
+								HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET);	\
+								HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);	\
+							} while(0)
 
 static FunctionalState _enabled = DISABLE;
 static FunctionalState _backlash = ENABLE;
@@ -34,7 +41,7 @@ void BSP_Motor_Init(void)
  * Sets the timer capture-compare register according to the speed parameter.
  * @param speed Speed of the motor between SPEED_MAX and -SPEED_MAX.
  */
-void BSP_Motor_SetSpeed(int16_t speed)
+void BSP_Motor_SetSpeed(int32_t speed)
 {
 	if(speed != _speed) {
 		if(speed > SPEED_MAX) {
@@ -42,7 +49,7 @@ void BSP_Motor_SetSpeed(int16_t speed)
 		} else if(speed < -SPEED_MAX) {
 			_speed = -SPEED_MAX;
 		} else {
-			_speed = speed;
+			_speed = (int16_t)speed;
 		}
 		if(_speed > -BACKLASH && _speed < BACKLASH) {
 			_backlash = ENABLE;
