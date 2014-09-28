@@ -11,6 +11,8 @@
 #include "stm32f4xx.h"
 #include "cmsis_os.h"
 
+void setRemoteControllerState(FunctionalState state);
+FunctionalState getRemoteControllerState(void);
 void MotorThread(void const * argument);
 
 #endif /* MOTORCONTROL_H_ */

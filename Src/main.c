@@ -151,9 +151,15 @@ void SystemClock_Config(void) {
 
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin __attribute__((unused))) {
-	static FunctionalState enabled = DISABLE;
-	enabled = !enabled;
-	BSP_Motor_SetState(enabled);
+	if (getRemoteControllerState() == ENABLE) {
+		setRemoteControllerState(DISABLE);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
+		//BSP_Radio_ConnectServo(DISABLE);
+	} else {
+		setRemoteControllerState(ENABLE);
+		HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
+		//BSP_Radio_ConnectServo(ENABLE);
+	}
 }
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask __attribute__((unused)),
