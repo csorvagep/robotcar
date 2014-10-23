@@ -21,8 +21,8 @@ static const int16_t lookUpUMax[LOOKUP_MAX] = { 48, 94, 177, 251, 325, 390 };
 static const int16_t lookUpYMax[LOOKUP_MAX] = { 50, 70, 95, 120, 145, 170 };
 static const float lookUpKMax[LOOKUP_MAX] = { 0.434783, 0.301205, 0.337838, 0.337838, 0.384615, 0.384615 };
 #define ZD 			0.992f
-#define KC			1.9f //2.4851f //Tcl = 500ms
-static int16_t ref = 60;
+#define KC			1.75f //2.4851f //Tcl = 500ms
+static int16_t ref = 35;
 static osMutexId refMutex = NULL;
 
 static FunctionalState remoteControllerState = DISABLE;
@@ -42,9 +42,9 @@ int32_t calculateU(int32_t uv) {
 		i++;
 	}
 
-	if (i == 0) {
-		uv = lookUpYMax[0];
-	} else {
+	if (i != 0) {
+//		uv = lookUpYMax[0];
+//	} else {
 		uv = (int32_t) (lookUpKMax[i - 1] * (uv - lookUpUMax[i - 1]) + lookUpYMax[i - 1] + 0.5);
 	}
 
@@ -56,9 +56,12 @@ void MotorThread(void const * argument __attribute__((unused))) {
 	uint8_t once = 1, i = 0;
 	float ek = 0, uc1 = 0, uc2 = 0, uc = 0;
 	int32_t uk = 0, u = 0;
+	int32_t radioVal = 0;
 
 	refMutex = osMutexCreate(NULL);
 	configASSERT(refMutex);
+
+	//BSP_Motor_SetBreakState(ENABLE);
 
 	for (;;) {
 		osDelayUntil(&previousWakeTime, 10);
@@ -84,9 +87,11 @@ void MotorThread(void const * argument __attribute__((unused))) {
 
 				u = calculateU(uk);
 				BSP_Motor_SetSpeed(u);
+				printf("M,%ld,%ld,%d\r\n", (int32_t) ek, u, BSP_Encoder_GetVelocity());
 			} else {
 				if (once) {
 					once = 0;
+					BSP_Motor_SetSpeed(0);
 					BSP_Motor_SetState(DISABLE);
 					ek = 0;
 					uc1 = 0;
@@ -97,17 +102,26 @@ void MotorThread(void const * argument __attribute__((unused))) {
 				}
 			}
 
-			if (++i > 10) {
-				printf("M,%ld,%ld,%d\r\n", (int32_t) ek, u, BSP_Encoder_GetVelocity());
-				i = 0;
-			}
+			//if (++i > 10) {
+			//	printf("M,%ld,%ld,%d\r\n", (int32_t) ek, u, BSP_Encoder_GetVelocity());
+			//	i = 0;
+			//}
 		} else {
 			if (!once) {
 				once = 1;
+				BSP_Motor_SetSpeed(0);
 				BSP_Motor_SetState(ENABLE);
 			}
 			if (++i > 10) {
-				BSP_Motor_SetSpeed(BSP_Radio_GetMotor() / 3);
+				radioVal = BSP_Radio_GetMotor();
+				radioVal /= 3;
+//				if(radioVal < -10) {
+//					BSP_Motor_SetBreak((uint16_t)(radioVal * -1));
+//					BSP_Motor_SetBreakState(ENABLE);
+//				} else {
+//					BSP_Motor_SetBreakState(DISABLE);
+					BSP_Motor_SetSpeed(radioVal);
+//				}
 				i = 0;
 			}
 		}

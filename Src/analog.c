@@ -19,6 +19,6 @@ void AnalogThread(void const * argument __attribute__((unused))) {
 
 		vbatm = BSP_Sensor_GetVBATM() * 9000 >> 12; //divide by 4096
 		vbate = BSP_Sensor_GetVBATE() * 9000 >> 12; //divide by 4096
-		printf("B,%lu,%lu\r\n", vbate, vbatm);
+		//printf("B,%lu,%lu\r\n", vbate, vbatm);
 	}
 }

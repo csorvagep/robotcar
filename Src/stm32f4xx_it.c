@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_it.c
-  * @date    10/08/2014 13:32:01
+  * @date    06/10/2014 11:31:44
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
@@ -42,12 +42,22 @@ extern void xPortSysTickHandler(void);
 
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef htim7;
 extern DMA_HandleTypeDef hdma_usart3_tx;
 extern DMA_HandleTypeDef hdma_usart3_rx;
 
 /******************************************************************************/
 /*            Cortex-M4 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
+
+/**
+* @brief This function handles TIM7 global interrupt.
+*/
+void TIM7_IRQHandler(void)
+{
+  HAL_NVIC_ClearPendingIRQ(TIM7_IRQn);
+  HAL_TIM_IRQHandler(&htim7);
+}
 
 /**
 * @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.

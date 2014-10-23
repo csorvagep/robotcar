@@ -6,6 +6,7 @@
  */
 
 #include "encoder.h"
+#include "motor.h"
 
 #include "radio.h"
 
@@ -63,5 +64,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 		_currCnt = htim2.Instance->CNT;
 		_velo = _currCnt - _oldCnt;
 		_total += _velo;
+	} else if(htim->Instance == TIM7) {
+		BSP_Motor_BreakCallback();
 	}
 }
