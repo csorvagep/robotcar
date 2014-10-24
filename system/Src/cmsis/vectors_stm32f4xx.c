@@ -193,8 +193,6 @@ UART7_IRQHandler(void);
 void __attribute__ ((weak, alias ("Default_Handler")))
 UART8_IRQHandler(void);
 void __attribute__ ((weak, alias ("Default_Handler")))
-SPI5_IRQHandler(void);
-void __attribute__ ((weak, alias ("Default_Handler")))
 SPI6_IRQHandler(void);
 void __attribute__ ((weak, alias ("Default_Handler")))
 SAI1_IRQHandler(void);
@@ -221,7 +219,7 @@ typedef void
 // The vector table.
 // This relies on the linker script to place at correct location in memory.
 
-__attribute__ ((section(".isr_vector")))
+__attribute__ ((section(".isr_vector"),used))
 pHandler __isr_vectors[] =
   {
   // Core Level - CM4

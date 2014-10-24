@@ -7,7 +7,7 @@
 
 #include "stm32f4xx.h"
 
-static void prvGetRegistersFromStack( uint32_t *pulFaultStackAddress );
+void prvGetRegistersFromStack( uint32_t *pulFaultStackAddress );
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -26,7 +26,7 @@ void HardFault_Handler(void) {
     );
 }
 
-static void prvGetRegistersFromStack( uint32_t *pulFaultStackAddress )
+void prvGetRegistersFromStack( uint32_t *pulFaultStackAddress )
 {
 /* These are volatile to try and prevent the compiler/linker optimizing them
 away as the variables never actually get used.  If the debugger won't show the

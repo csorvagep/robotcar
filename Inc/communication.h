@@ -13,5 +13,6 @@
 
 void CommThread(void const * argument);
 void SendChars(const char * str, size_t len);
+void SendString(char* str);
 
 #endif /* COMMUNICATION_H_ */

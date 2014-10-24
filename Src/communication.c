@@ -78,6 +78,18 @@ void SendChars(const char * str, size_t len) {
 	}
 }
 
+void SendString(char* str) {
+	if (!Connected || !BypassMode)
+		return;
+
+	if (sendMutex != NULL) {
+		if (osMutexWait(sendMutex, 3) == osOK) {
+			BSP_BT_SendStr(str);
+			osMutexRelease(sendMutex);
+		}
+	}
+}
+
 void ProcessCommand(void) {
 	switch (internalBuffer[0]) {
 	case 'A':

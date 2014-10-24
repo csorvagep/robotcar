@@ -11,7 +11,7 @@
 #include "encoder.h"
 #include "radio.h"
 
-#include <stdio.h>
+//#include <stdio.h>
 
 #define MAX_OUTPUT	450
 #define MIN_OUTPUT	-450
@@ -87,7 +87,7 @@ void MotorThread(void const * argument __attribute__((unused))) {
 
 				u = calculateU(uk);
 				BSP_Motor_SetSpeed(u);
-				printf("M,%ld,%ld,%d\r\n", (int32_t) ek, u, BSP_Encoder_GetVelocity());
+				//printf("M,%ld,%ld,%d\r\n", (int32_t) ek, u, BSP_Encoder_GetVelocity());
 			} else {
 				if (once) {
 					once = 0;

@@ -48,12 +48,15 @@
 #include "radio.h"
 #include "motor.h"
 #include "sensor.h"
+#include "stm32f4_discovery_accelerometer.h"
 
-#include <stdio.h>
+//#include <stdio.h>
 
 #include "communication.h"
 #include "motorcontrol.h"
 #include "analog.h"
+#include "deadreckoning.h"
+
 
 /* USER CODE END 0 */
 
@@ -97,6 +100,7 @@ int main(void)
 	BSP_Radio_Init();
 	BSP_Encoder_Init();
 	BSP_Sensor_Init();
+	BSP_ACCELERO_Init();
 
 	BSP_Radio_ConnectServo(ENABLE);
 	BSP_Radio_ServoStatus(ENABLE);
@@ -173,7 +177,7 @@ void vApplicationStackOverflowHook(TaskHandle_t xTask __attribute__((unused)),
 }
 /* USER CODE END 4 */
 
-static void StartThread(void const * argument) {
+static void StartThread(void const * argument __attribute__((unused))) {
 
   /* USER CODE BEGIN 5 */
 
@@ -185,8 +189,13 @@ static void StartThread(void const * argument) {
 	osThreadDef(MOTOR_Thread, MotorThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 20);
 	osThreadCreate(osThread(MOTOR_Thread), NULL);
 
+	/* Analog sensors (battery) */
 	osThreadDef(ANALOG_Thread, AnalogThread, osPriorityBelowNormal, 0, configMINIMAL_STACK_SIZE);
 	osThreadCreate(osThread(ANALOG_Thread), NULL);
+
+	/* Dead-reckoning */
+	osThreadDef(DR_Thread, DeadReckoningThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
+	osThreadCreate(osThread(DR_Thread), NULL);
 
 	/* Infinite loop */
 	for (;;) {
