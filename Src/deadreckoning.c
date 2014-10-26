@@ -25,73 +25,48 @@
 #define HALF_CIRC			(1 / 180.0f)
 #define DEG2RAD(x)			(float)(x * HALF_CIRC * M_PI)
 
-static float wrapAngle(float phi);
-
 void DeadReckoningThread(void const * argument __attribute__((unused))) {
 	uint32_t previousWakeTime;
 
 	int16_t accelero[3];
-	float gyro[3], gyroOffset = 0.0f;
+	float gyro[3];
 	float x = 0.0f;
 	float y = 0.0f;
 	float theta = 0.0f;
-	float ds;
-	float dtheta;
 
 	char outputBuffer[64];
-	uint8_t init = 1;
 	uint16_t i = 0;
 
 	BSP_ACCELERO_Reset();
 	BSP_GYRO_Reset();
 	osDelay(300);
+	//beta = 0.75f;
 
 	previousWakeTime = osKernelSysTick();
 	for (;;) {
 		osDelayUntil(&previousWakeTime, TIME_STEP_MS);
 
-		if (init) {
-			BSP_GYRO_GetXYZ(gyro);
-			gyroOffset += gyro[2];
-			i++;
+		BSP_ACCELERO_GetXYZ(accelero);
+		BSP_GYRO_GetXYZ(gyro);
 
-			if (i == 100) {
-				i = 0;
-				init = 0;
-				gyroOffset *= 0.001f;
-			}
-		} else {
-			BSP_ACCELERO_GetXYZ(accelero);
-			BSP_GYRO_GetXYZ(gyro);
+		int16_t v = BSP_Encoder_GetVelocity();
+		float ds = v * METER_PER_INCR;
 
-			int16_t v = BSP_Encoder_GetVelocity();
+		x += ds * cosf(theta);
+		y += ds * sinf(theta);
 
-			if (v) {
-				ds = v * METER_PER_INCR;
-				dtheta = DEG2RAD((gyro[2] - gyroOffset) * 0.001f);
+		for(int j = 0; j < 3; j++) {
+			gyro[j] =  DEG2RAD(gyro[j] * 0.001f);
+		}
 
-				theta = wrapAngle(dtheta * TIME_STEP * 0.5f + theta);
-				x += ds * cosf(theta);
-				y += ds * sinf(theta);
-				theta = wrapAngle(dtheta * TIME_STEP * 0.5f + theta);
-			}
+		MadgwickAHRSupdateIMU(gyro[0], gyro[1], gyro[2], accelero[0]*1.0f, accelero[1]*1.0f, accelero[2]*1.0f);
 
-			if (++i > 10) {
-				sprintf(outputBuffer, "G,%d,%d,%4.2f\r\nC,%4.2f,%4.2f,%4.2f\r\n", accelero[1], accelero[0], dtheta, x,
-						y, theta);
-				SendString(outputBuffer);
-				i = 0;
-			}
+		theta = atan2(2*(q1*q2 - q0*q3), 2*q0*q0 - 1.0f - 2*q1*q1);
 
+		if (++i > 10) {
+			sprintf(outputBuffer, "C,%4.2f,%4.2f,%4.2f\r\n", x, y, theta);
+			SendString(outputBuffer);
+			i = 0;
 		}
 	}
-}
-
-static float wrapAngle(float phi) {
-	while (phi > M_PI)
-		phi -= M_PI;
-	while (phi < -M_PI)
-		phi += M_PI;
-
-	return phi;
 }
