@@ -49,6 +49,7 @@
 #include "motor.h"
 #include "sensor.h"
 #include "stm32f4_discovery_accelerometer.h"
+#include "stm32f4_discovery_gyroscope.h"
 
 //#include <stdio.h>
 
@@ -101,6 +102,7 @@ int main(void)
 	BSP_Encoder_Init();
 	BSP_Sensor_Init();
 	BSP_ACCELERO_Init();
+	BSP_GYRO_Init();
 
 	BSP_Radio_ConnectServo(ENABLE);
 	BSP_Radio_ServoStatus(ENABLE);
@@ -194,7 +196,7 @@ static void StartThread(void const * argument __attribute__((unused))) {
 	osThreadCreate(osThread(ANALOG_Thread), NULL);
 
 	/* Dead-reckoning */
-	osThreadDef(DR_Thread, DeadReckoningThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
+	osThreadDef(DR_Thread, DeadReckoningThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 256);
 	osThreadCreate(osThread(DR_Thread), NULL);
 
 	/* Infinite loop */
