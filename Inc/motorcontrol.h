@@ -11,8 +11,13 @@
 #include "stm32f4xx.h"
 #include "cmsis_os.h"
 
+#define MAX_VELOCITY	3.0f
+
 void setRemoteControllerState(FunctionalState state);
 FunctionalState getRemoteControllerState(void);
 void MotorThread(void const * argument);
+void setVelocity(float velocity);
+void setPhi(float phi);
+void setPrintMotor(char state);
 
 #endif /* MOTORCONTROL_H_ */

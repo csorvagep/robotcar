@@ -49,13 +49,14 @@ uint8_t BSP_BT_ReceiveStr(char *buffer, uint8_t buffer_size) {
 	uint8_t i = 0;
 	uint8_t currentPosition = (uint8_t)(RX_BUFFER_SIZE - hdma_usart3_rx.Instance->NDTR);
 
-	while((rxOverflow == SET || rxPosition != currentPosition) && i < buffer_size) {
+	while((rxOverflow == SET || rxPosition != currentPosition) && i < buffer_size - 1) {
 		buffer[i++] = rxBuff[rxPosition++];
 		if(rxPosition >= RX_BUFFER_SIZE) {
 			rxOverflow = RESET;
 			rxPosition = 0;
 		}
 	}
+	buffer[i] = '\0';
 	return i;
 }
 
@@ -86,7 +87,7 @@ uint8_t BSP_BT_ReceiveStrNL(char *buffer, uint8_t buffer_size) {
 	}
 
 	if(lf) {
-		return BSP_BT_ReceiveStr(buffer, i);
+		return BSP_BT_ReceiveStr(buffer, i + 1);
 	} else {
 		return 0;
 	}

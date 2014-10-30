@@ -9,6 +9,9 @@
 
 #include "bluetooth.h"
 #include <string.h>
+#include "motorcontrol.h"
+#include "deadreckoning.h"
+#include "analog.h"
 
 static osMutexId sendMutex = NULL;
 static const char connectString[] = "AT+AB SPPConnect 000272cfc2e7\r\n";
@@ -94,10 +97,28 @@ void ProcessCommand(void) {
 	switch (internalBuffer[0]) {
 	case 'A':
 		ProcessATAB();
+		internalBuffer[0] = '\0';
+		break;
+	case 'B':
+		setPrintBattery(internalBuffer[2]);
+		break;
+	case 'C':
+		setPrintConfig(internalBuffer[2]);
+		break;
+	case 'F':
+		setPhi(atoff(internalBuffer + 2));
+		break;
+	case 'M':
+		setPrintMotor(internalBuffer[2]);
+		break;
+	case 'V':
+		setVelocity(atoff(internalBuffer + 2));
 		break;
 	default:
+		internalBuffer[0] = '\0';
 		break;
 	}
+	SendString(internalBuffer);
 }
 
 void ProcessATAB(void) {

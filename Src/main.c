@@ -104,7 +104,7 @@ int main(void)
 	BSP_ACCELERO_Init();
 	BSP_GYRO_Init();
 
-	BSP_Radio_ConnectServo(ENABLE);
+	//BSP_Radio_ConnectServo(ENABLE);
 	BSP_Radio_ServoStatus(ENABLE);
 
   /* USER CODE END 2 */
@@ -188,7 +188,7 @@ static void StartThread(void const * argument __attribute__((unused))) {
 	osThreadCreate(osThread(COMM_Thread), NULL);
 
 	/* Motor controller thread */
-	osThreadDef(MOTOR_Thread, MotorThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 20);
+	osThreadDef(MOTOR_Thread, MotorThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 48);
 	osThreadCreate(osThread(MOTOR_Thread), NULL);
 
 	/* Analog sensors (battery) */

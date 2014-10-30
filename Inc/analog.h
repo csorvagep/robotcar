@@ -5,12 +5,10 @@
  *      Author: Gábor
  */
 
-#ifndef ANALOG_H_
-#define ANALOG_H_
+#pragma once
 
 #include "stm32f4xx.h"
 #include "cmsis_os.h"
 
 void AnalogThread(void const * argument);
-
-#endif /* ANALOG_H_ */
+void setPrintBattery(char state);

@@ -20,6 +20,8 @@
 #define HALF_CIRC			(1 / 180.0f)
 #define DEG2RAD(x)			(float)(x * HALF_CIRC * M_PI)
 
+static volatile FunctionalState printState = DISABLE;
+
 void DeadReckoningThread(void const * argument __attribute__((unused))) {
 	uint32_t previousWakeTime;
 
@@ -50,18 +52,28 @@ void DeadReckoningThread(void const * argument __attribute__((unused))) {
 		x += ds * cosf(theta);
 		y += ds * sinf(theta);
 
-		for(int j = 0; j < 3; j++) {
-			gyro[j] =  DEG2RAD(gyro[j] * 0.001f);
+		for (int j = 0; j < 3; j++) {
+			gyro[j] = DEG2RAD(gyro[j] * 0.001f);
 		}
 
-		MadgwickAHRSupdateIMU(gyro[0], gyro[1], gyro[2], accelero[0]*1.0f, accelero[1]*1.0f, accelero[2]*1.0f);
+		MadgwickAHRSupdateIMU(gyro[0], gyro[1], gyro[2], accelero[0] * 1.0f, accelero[1] * 1.0f, accelero[2] * 1.0f);
 
-		theta = atan2(2*(q1*q2 - q0*q3), 2*q0*q0 - 1.0f - 2*q1*q1);
+		theta = atan2(2 * (q1 * q2 - q0 * q3), 2 * q0 * q0 - 1.0f - 2 * q1 * q1);
 
 		if (++i > 10) {
-			sprintf(outputBuffer, "C,%4.2f,%4.2f,%4.2f\r\n", x, y, theta);
-			SendString(outputBuffer);
+			if (printState == ENABLE) {
+				sprintf(outputBuffer, "C,%4.2f,%4.2f,%4.2f\r\n", x, y, theta);
+				SendString(outputBuffer);
+			}
 			i = 0;
 		}
+	}
+}
+
+void setPrintConfig(char state) {
+	if(state == '1') {
+		printState = ENABLE;
+	} else {
+		printState = DISABLE;
 	}
 }

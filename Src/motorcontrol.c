@@ -10,8 +10,9 @@
 #include "motor.h"
 #include "encoder.h"
 #include "radio.h"
+#include "communication.h"
 
-//#include <stdio.h>
+#include <stdio.h>
 
 #define MAX_OUTPUT	450
 #define MIN_OUTPUT	-450
@@ -22,10 +23,13 @@ static const int16_t lookUpYMax[LOOKUP_MAX] = { 50, 70, 95, 120, 145, 170 };
 static const float lookUpKMax[LOOKUP_MAX] = { 0.434783, 0.301205, 0.337838, 0.337838, 0.384615, 0.384615 };
 #define ZD 			0.992f
 #define KC			1.9f //2.4851f //Tcl = 500ms
-static float ref = 1.0f;
+
+static float refV = 1.0f;
+static float refPhi = 0.0f;
 static osMutexId refMutex = NULL;
 
 static FunctionalState remoteControllerState = DISABLE;
+static volatile FunctionalState printState = DISABLE;
 
 int32_t calculateU(int32_t uv);
 
@@ -43,8 +47,6 @@ int32_t calculateU(int32_t uv) {
 	}
 
 	if (i != 0) {
-//		uv = lookUpYMax[0];
-//	} else {
 		uv = (int32_t) (lookUpKMax[i - 1] * (uv - lookUpUMax[i - 1]) + lookUpYMax[i - 1] + 0.5);
 	}
 
@@ -57,25 +59,25 @@ void MotorThread(void const * argument __attribute__((unused))) {
 	float ek = 0, uc1 = 0, uc2 = 0, uc = 0;
 	int32_t uk = 0, u = 0;
 	int32_t radioVal = 0;
+	char outputBuffer[32];
 
 	refMutex = osMutexCreate(NULL);
 	configASSERT(refMutex);
-
-	//BSP_Motor_SetBreakState(ENABLE);
 
 	for (;;) {
 		osDelayUntil(&previousWakeTime, 10);
 		if (!remoteControllerState) {
 			/* Dead man switch check */
 			int16_t motor = BSP_Radio_GetMotor();
-			if ((motor > 100 || motor < -100) && ref != 0.0f) {
+			if ((motor > 100 || motor < -100) && refV != 0.0f) {
 				if (!once) {
 					once = 1;
 					BSP_Motor_SetState(ENABLE);
+					BSP_Radio_ConnectServo(DISABLE);
 				}
 
-				float incrRef = ref * INCR_PER_METER * TIME_STEP;
-				if(motor < 0)
+				float incrRef = refV * INCR_PER_METER * TIME_STEP;
+				if (motor < 0)
 					incrRef *= -1.0f;
 
 				ek = incrRef - BSP_Encoder_GetVelocity();
@@ -92,12 +94,13 @@ void MotorThread(void const * argument __attribute__((unused))) {
 
 				u = calculateU(uk);
 				BSP_Motor_SetSpeed(u);
-				//printf("M,%ld,%ld,%d\r\n", (int32_t) ek, u, BSP_Encoder_GetVelocity());
-			} else {
+				BSP_Radio_SetPhi(refPhi);
+			} else { //dead man switch off
 				if (once) {
 					once = 0;
 					BSP_Motor_SetSpeed(0);
 					BSP_Motor_SetState(DISABLE);
+					BSP_Radio_ConnectServo(DISABLE);
 					ek = 0;
 					uc1 = 0;
 					uc2 = 0;
@@ -107,26 +110,24 @@ void MotorThread(void const * argument __attribute__((unused))) {
 				}
 			}
 
-			//if (++i > 10) {
-			//	printf("M,%ld,%ld,%d\r\n", (int32_t) ek, u, BSP_Encoder_GetVelocity());
-			//	i = 0;
-			//}
-		} else {
+			if (++i > 10) {
+				if (printState == ENABLE) {
+					sprintf(outputBuffer, "M,%ld,%ld,%d\r\n", (int32_t) ek, u, BSP_Encoder_GetVelocity());
+					SendString(outputBuffer);
+				}
+				i = 0;
+			}
+		} else { //remoteControllerState
 			if (!once) {
 				once = 1;
 				BSP_Motor_SetSpeed(0);
 				BSP_Motor_SetState(ENABLE);
+				BSP_Radio_ConnectServo(ENABLE);
 			}
 			if (++i > 10) {
 				radioVal = BSP_Radio_GetMotor();
 				radioVal /= 3;
-//				if(radioVal < -10) {
-//					BSP_Motor_SetBreak((uint16_t)(radioVal * -1));
-//					BSP_Motor_SetBreakState(ENABLE);
-//				} else {
-//					BSP_Motor_SetBreakState(DISABLE);
-					BSP_Motor_SetSpeed(radioVal);
-//				}
+				BSP_Motor_SetSpeed(radioVal);
 				i = 0;
 			}
 		}
@@ -139,4 +140,26 @@ void setRemoteControllerState(FunctionalState state) {
 
 FunctionalState getRemoteControllerState(void) {
 	return remoteControllerState;
+}
+
+void setVelocity(float velocity) {
+	if (velocity > MAX_VELOCITY) {
+		refV = MAX_VELOCITY;
+	} else if (velocity < -MAX_VELOCITY) {
+		refV = -MAX_VELOCITY;
+	} else {
+		refV = velocity;
+	}
+}
+
+void setPhi(float phi) {
+	refPhi = phi;
+}
+
+void setPrintMotor(char state) {
+	if (state == '1') {
+		printState = ENABLE;
+	} else {
+		printState = DISABLE;
+	}
 }
