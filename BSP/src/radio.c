@@ -63,6 +63,10 @@ void BSP_Radio_SetSteer(int16_t value) {
 	htim4.Instance->CCR4 = uwOCValue;
 }
 
+void BSP_Radio_SetPhi(float phi) {
+	BSP_Radio_SetSteer(phi * DIGIT_PER_RAD);
+}
+
 void BSP_Radio_ServoStatus(FunctionalState state) {
 	_servo = state;
 	if (state == ENABLE && _signalDetected == SET) {

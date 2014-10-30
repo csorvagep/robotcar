@@ -17,11 +17,6 @@
 #include "encoder.h"
 #include "MadgwickAHRS.h"
 
-#define INCR_PER_METER 		8634.56f
-#define METER_PER_INCR	 	1.1581e-4f
-#define TIME_STEP_MS		10
-#define TIME_STEP			0.01f
-
 #define HALF_CIRC			(1 / 180.0f)
 #define DEG2RAD(x)			(float)(x * HALF_CIRC * M_PI)
 
@@ -40,7 +35,7 @@ void DeadReckoningThread(void const * argument __attribute__((unused))) {
 	BSP_ACCELERO_Reset();
 	BSP_GYRO_Reset();
 	osDelay(300);
-	//beta = 0.75f;
+	beta = 0.033f;
 
 	previousWakeTime = osKernelSysTick();
 	for (;;) {

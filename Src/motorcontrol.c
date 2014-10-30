@@ -21,8 +21,8 @@ static const int16_t lookUpUMax[LOOKUP_MAX] = { 48, 94, 177, 251, 325, 390 };
 static const int16_t lookUpYMax[LOOKUP_MAX] = { 50, 70, 95, 120, 145, 170 };
 static const float lookUpKMax[LOOKUP_MAX] = { 0.434783, 0.301205, 0.337838, 0.337838, 0.384615, 0.384615 };
 #define ZD 			0.992f
-#define KC			1.75f //2.4851f //Tcl = 500ms
-static int16_t ref = 35;
+#define KC			1.9f //2.4851f //Tcl = 500ms
+static float ref = 1.0f;
 static osMutexId refMutex = NULL;
 
 static FunctionalState remoteControllerState = DISABLE;
@@ -67,13 +67,18 @@ void MotorThread(void const * argument __attribute__((unused))) {
 		osDelayUntil(&previousWakeTime, 10);
 		if (!remoteControllerState) {
 			/* Dead man switch check */
-			if (BSP_Radio_GetMotor() > 100 && ref != 0) {
+			int16_t motor = BSP_Radio_GetMotor();
+			if ((motor > 100 || motor < -100) && ref != 0.0f) {
 				if (!once) {
 					once = 1;
 					BSP_Motor_SetState(ENABLE);
 				}
 
-				ek = ref - BSP_Encoder_GetVelocity();
+				float incrRef = ref * INCR_PER_METER * TIME_STEP;
+				if(motor < 0)
+					incrRef *= -1.0f;
+
+				ek = incrRef - BSP_Encoder_GetVelocity();
 				uc2 = uc2 * ZD + (1 - ZD) * uk;
 				uc1 = KC * ek;
 				uc = uc1 + uc2;
