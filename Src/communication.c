@@ -53,9 +53,10 @@ void CommThread(void const * argument __attribute__((unused))) {
 				BSP_BT_Flush();
 				osMutexRelease(sendMutex);
 			}
+#if USE_SPP
 		} else if (!Connected && SPPTry == RESET) {
 
-			if(!(cnt % 10)) {
+			if (!(cnt % 10)) {
 				BSP_BT_ToggleLed();
 			}
 
@@ -65,6 +66,7 @@ void CommThread(void const * argument __attribute__((unused))) {
 				cnt = 0;
 				SPPTry = SET;
 			}
+#endif
 		}
 	}
 }
@@ -94,6 +96,9 @@ void SendString(char* str) {
 }
 
 void ProcessCommand(void) {
+	char* tail;
+	float x,y,theta;
+
 	switch (internalBuffer[0]) {
 	case 'A':
 		ProcessATAB();
@@ -108,8 +113,25 @@ void ProcessCommand(void) {
 	case 'F':
 		setPhi(atoff(internalBuffer + 2));
 		break;
+	case 'I':
+		x = strtof(internalBuffer + 2, &tail);
+		y = strtof(tail + 1, NULL);
+		setVelocity(x);
+		setPhi(y);
+		printConfig();
+		break;
 	case 'M':
 		setPrintMotor(internalBuffer[2]);
+		break;
+	case 'R':
+		resetConfig();
+		break;
+	case 'S':
+		x = strtof(internalBuffer + 2, &tail);
+		y = strtof(tail + 1, &tail);
+		theta = strtof(tail + 1, NULL);
+		setConfig(x,y,theta);
+		printConfig();
 		break;
 	case 'V':
 		setVelocity(atoff(internalBuffer + 2));
@@ -118,7 +140,7 @@ void ProcessCommand(void) {
 		internalBuffer[0] = '\0';
 		break;
 	}
-	SendString(internalBuffer);
+	//SendString(internalBuffer);
 }
 
 void ProcessATAB(void) {

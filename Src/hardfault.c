@@ -6,6 +6,7 @@
  */
 
 #include "stm32f4xx.h"
+#include "motor.h"
 
 void prvGetRegistersFromStack( uint32_t *pulFaultStackAddress );
 
@@ -51,10 +52,15 @@ volatile uint32_t psr;/* Program status register. */
     pc = pulFaultStackAddress[ 6 ];
     psr = pulFaultStackAddress[ 7 ];
 
-    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET);
+    BSP_Motor_SetState(DISABLE);
     /* When the following line is hit, the variables contain the register values. */
-    for( ;; );
+    uint32_t i = 0;
+    for(;;) {
+    	if(++i>= 0xfffff) {
+    		i = 0;
+    		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
+    	}
+    }
 }
 
 #pragma GCC diagnostic pop

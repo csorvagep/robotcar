@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 06/10/2014 11:31:44
+  * Date               : 08/11/2014 03:01:01
   * Description        : Main program body
   ******************************************************************************
   *
@@ -41,7 +41,23 @@
 #include "usart.h"
 #include "gpio.h"
 
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
 /* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void StartThread(void const * argument);
+
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
 #include "encoder.h"
@@ -51,8 +67,6 @@
 #include "stm32f4_discovery_accelerometer.h"
 #include "stm32f4_discovery_gyroscope.h"
 
-//#include <stdio.h>
-
 #include "communication.h"
 #include "motorcontrol.h"
 #include "analog.h"
@@ -60,10 +74,6 @@
 
 
 /* USER CODE END 0 */
-
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void StartThread(void const * argument);
 
 int main(void)
 {
@@ -80,11 +90,6 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* System interrupt init*/
-  /* Sets the priority grouping field */
-  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
@@ -93,7 +98,6 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM4_Init();
   MX_TIM6_Init();
-  MX_TIM7_Init();
   MX_USART3_UART_Init();
 
   /* USER CODE BEGIN 2 */
@@ -109,7 +113,7 @@ int main(void)
 
   /* USER CODE END 2 */
 
-  /* Code generated for FreeRTOS */
+  /* Init code generated for FreeRTOS */
   /* Create Start thread */
   osThreadDef(USER_Thread, StartThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
   osThreadCreate (osThread(USER_Thread), NULL);
@@ -132,8 +136,8 @@ int main(void)
 void SystemClock_Config(void)
 {
 
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_OscInitTypeDef RCC_OscInitStruct;
+  RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
   __PWR_CLK_ENABLE();
 
@@ -179,12 +183,13 @@ void vApplicationStackOverflowHook(TaskHandle_t xTask __attribute__((unused)),
 }
 /* USER CODE END 4 */
 
-static void StartThread(void const * argument __attribute__((unused))) {
+static void StartThread(void const * argument)
+{
 
   /* USER CODE BEGIN 5 */
 
 	/* Communication thread */
-	osThreadDef(COMM_Thread, CommThread, osPriorityAboveNormal, 0, configMINIMAL_STACK_SIZE);
+	osThreadDef(COMM_Thread, CommThread, osPriorityAboveNormal, 0, configMINIMAL_STACK_SIZE + 128);
 	osThreadCreate(osThread(COMM_Thread), NULL);
 
 	/* Motor controller thread */
@@ -209,7 +214,6 @@ static void StartThread(void const * argument __attribute__((unused))) {
   /* USER CODE END 5 */ 
 
 }
- 
 
 #ifdef USE_FULL_ASSERT
 

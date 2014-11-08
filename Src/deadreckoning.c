@@ -21,18 +21,22 @@
 #define DEG2RAD(x)			(float)(x * HALF_CIRC * M_PI)
 
 static volatile FunctionalState printState = DISABLE;
+float x = 0.0f;
+float y = 0.0f;
+float theta = 0.0f;
+osMutexId configMutex = NULL;
 
 void DeadReckoningThread(void const * argument __attribute__((unused))) {
 	uint32_t previousWakeTime;
 
 	int16_t accelero[3];
 	float gyro[3];
-	float x = 0.0f;
-	float y = 0.0f;
-	float theta = 0.0f;
 
 	char outputBuffer[64];
 	uint16_t i = 0;
+
+	configMutex = osMutexCreate(NULL);
+	configASSERT(configMutex);
 
 	BSP_ACCELERO_Reset();
 	BSP_GYRO_Reset();
@@ -49,23 +53,28 @@ void DeadReckoningThread(void const * argument __attribute__((unused))) {
 		int16_t v = BSP_Encoder_GetVelocity();
 		float ds = v * METER_PER_INCR;
 
-		x += ds * cosf(theta);
-		y += ds * sinf(theta);
+		if(osMutexWait(configMutex, TIME_STEP_MS >> 1) == osOK) {
 
-		for (int j = 0; j < 3; j++) {
-			gyro[j] = DEG2RAD(gyro[j] * 0.001f);
-		}
+			x += ds * cosf(theta);
+			y += ds * sinf(theta);
 
-		MadgwickAHRSupdateIMU(gyro[0], gyro[1], gyro[2], accelero[0] * 1.0f, accelero[1] * 1.0f, accelero[2] * 1.0f);
-
-		theta = atan2(2 * (q1 * q2 - q0 * q3), 2 * q0 * q0 - 1.0f - 2 * q1 * q1);
-
-		if (++i > 10) {
-			if (printState == ENABLE) {
-				sprintf(outputBuffer, "C,%4.2f,%4.2f,%4.2f\r\n", x, y, theta);
-				SendString(outputBuffer);
+			for (int j = 0; j < 3; j++) {
+				gyro[j] = DEG2RAD(gyro[j] * 0.001f);
 			}
-			i = 0;
+
+			MadgwickAHRSupdateIMU(gyro[0], gyro[1], gyro[2], accelero[0] * 1.0f, accelero[1] * 1.0f, accelero[2] * 1.0f);
+
+			theta = atan2(2 * (q1 * q2 - q0 * q3), 2 * q0 * q0 - 1.0f - 2 * q1 * q1);
+
+			if (++i > 10) {
+				if (printState == ENABLE) {
+					sprintf(outputBuffer, "C,%4.2f,%4.2f,%4.2f\r\n", x, y, theta);
+					SendString(outputBuffer);
+				}
+				i = 0;
+			}
+
+			osMutexRelease(configMutex);
 		}
 	}
 }
@@ -75,5 +84,35 @@ void setPrintConfig(char state) {
 		printState = ENABLE;
 	} else {
 		printState = DISABLE;
+	}
+}
+
+void printConfig() {
+	char outputBuffer[64];
+	if(configMutex && osMutexWait(configMutex, 2) == osOK) {
+		sprintf(outputBuffer, "O,%4.2f,%4.2f,%4.2f\r\n", x, y, theta);
+		SendString(outputBuffer);
+		osMutexRelease(configMutex);
+	}
+}
+
+void resetConfig() {
+	setConfig(0.0f, 0.0f, 0.0f);
+}
+
+void setConfig(float newX, float newY, float newTheta) {
+	if(configMutex && osMutexWait(configMutex, 2) == osOK) {
+		/* Set new configuration */
+		x = newX;
+		y = newY;
+		theta = newTheta;
+
+		/* Set quaternion according to theta */
+		q0 = cosf(theta);
+		q1 = 0.0f;
+		q2 = 0.0f;
+		q3 = sinf(theta);
+
+		osMutexRelease(configMutex);
 	}
 }

@@ -12,6 +12,7 @@
 #include "cmsis_os.h"
 
 #define MAX_VELOCITY	3.0f
+#define MAX_PHI			0.3f
 
 void setRemoteControllerState(FunctionalState state);
 FunctionalState getRemoteControllerState(void);

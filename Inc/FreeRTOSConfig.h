@@ -62,7 +62,7 @@
 /**
   ******************************************************************************
   * File Name          : FreeRTOSConfig.h
-  * Date               : 06/10/2014 11:31:44
+  * Date               : 08/11/2014 03:00:59
   ******************************************************************************
   */
 
@@ -128,7 +128,6 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil        1
 #define INCLUDE_vTaskDelay             1
 #define INCLUDE_xTaskGetSchedulerState 1
-#define INCLUDE_eTaskGetState		   1
 
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
