@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_it.c
-  * @date    08/11/2014 03:01:00
+  * @date    08/11/2014 12:41:13
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
@@ -35,10 +35,7 @@
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx.h"
 #include "stm32f4xx_it.h"
-#include "cmsis_os.h"
-/* USER CODE BEGIN 0 */
 
-/* USER CODE END 0 */
 /* External variables --------------------------------------------------------*/
  
 extern void xPortSysTickHandler(void);
@@ -53,48 +50,22 @@ extern DMA_HandleTypeDef hdma_usart3_rx;
 /******************************************************************************/
 
 /**
-* @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
-*/
-void TIM6_DAC_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
-
-  /* USER CODE END TIM6_DAC_IRQn 0 */
-  HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
-  HAL_TIM_IRQHandler(&htim6);
-  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
-
-  /* USER CODE END TIM6_DAC_IRQn 1 */
-}
-
-/**
-* @brief This function handles DMA1 Stream3 global interrupt.
-*/
-void DMA1_Stream3_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA1_Stream3_IRQn 0 */
-
-  /* USER CODE END DMA1_Stream3_IRQn 0 */
-  HAL_NVIC_ClearPendingIRQ(DMA1_Stream3_IRQn);
-  HAL_DMA_IRQHandler(&hdma_usart3_tx);
-  /* USER CODE BEGIN DMA1_Stream3_IRQn 1 */
-
-  /* USER CODE END DMA1_Stream3_IRQn 1 */
-}
-
-/**
 * @brief This function handles EXTI Line0 interrupt.
 */
 void EXTI0_IRQHandler(void)
 {
-  /* USER CODE BEGIN EXTI0_IRQn 0 */
-
-  /* USER CODE END EXTI0_IRQn 0 */
   HAL_NVIC_ClearPendingIRQ(EXTI0_IRQn);
+  
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
-  /* USER CODE BEGIN EXTI0_IRQn 1 */
+}
 
-  /* USER CODE END EXTI0_IRQn 1 */
+/**
+* @brief This function handles TIM6 global interrupt, DAC1 and DAC2 underrun error interrupts.
+*/
+void TIM6_DAC_IRQHandler(void)
+{
+  HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
+  HAL_TIM_IRQHandler(&htim6);
 }
 
 /**
@@ -102,16 +73,17 @@ void EXTI0_IRQHandler(void)
 */
 void SysTick_Handler(void)
 {
-  /* USER CODE BEGIN SysTick_IRQn 0 */
-
-  /* USER CODE END SysTick_IRQn 0 */
-  if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED) {
-    xPortSysTickHandler();
-  }
+  xPortSysTickHandler();
   HAL_IncTick();
-  /* USER CODE BEGIN SysTick_IRQn 1 */
+}
 
-  /* USER CODE END SysTick_IRQn 1 */
+/**
+* @brief This function handles DMA1 Stream3 global interrupt.
+*/
+void DMA1_Stream3_IRQHandler(void)
+{
+  HAL_NVIC_ClearPendingIRQ(DMA1_Stream3_IRQn);
+  HAL_DMA_IRQHandler(&hdma_usart3_tx);
 }
 
 /**
@@ -119,14 +91,8 @@ void SysTick_Handler(void)
 */
 void DMA1_Stream1_IRQHandler(void)
 {
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
-
-  /* USER CODE END DMA1_Stream1_IRQn 0 */
   HAL_NVIC_ClearPendingIRQ(DMA1_Stream1_IRQn);
   HAL_DMA_IRQHandler(&hdma_usart3_rx);
-  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
-
-  /* USER CODE END DMA1_Stream1_IRQn 1 */
 }
 
 /**
@@ -134,17 +100,8 @@ void DMA1_Stream1_IRQHandler(void)
 */
 void TIM4_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM4_IRQn 0 */
-
-  /* USER CODE END TIM4_IRQn 0 */
   HAL_NVIC_ClearPendingIRQ(TIM4_IRQn);
   HAL_TIM_IRQHandler(&htim4);
-  /* USER CODE BEGIN TIM4_IRQn 1 */
-
-  /* USER CODE END TIM4_IRQn 1 */
 }
 
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -10,7 +10,7 @@
 
 #include "stm32f4xx.h"
 
-#define SPEED_MAX		215
+#define SPEED_MAX		185
 #define MIDDLE_VAL		250
 
 void BSP_Motor_Init(void);

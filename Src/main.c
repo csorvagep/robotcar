@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 08/11/2014 03:01:01
+  * Date               : 08/11/2014 12:41:13
   * Description        : Main program body
   ******************************************************************************
   *
@@ -41,23 +41,7 @@
 #include "usart.h"
 #include "gpio.h"
 
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
 /* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void StartThread(void const * argument);
-
-/* USER CODE BEGIN PFP */
-
-/* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
 #include "encoder.h"
@@ -72,8 +56,11 @@ static void StartThread(void const * argument);
 #include "analog.h"
 #include "deadreckoning.h"
 
-
 /* USER CODE END 0 */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void StartThread(void const * argument);
 
 int main(void)
 {
@@ -89,6 +76,11 @@ int main(void)
 
   /* Configure the system clock */
   SystemClock_Config();
+
+  /* System interrupt init*/
+  /* Sets the priority grouping field */
+  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
@@ -108,12 +100,13 @@ int main(void)
 	BSP_ACCELERO_Init();
 	BSP_GYRO_Init();
 
-	//BSP_Radio_ConnectServo(ENABLE);
+	BSP_Radio_ConnectServo(ENABLE);
 	BSP_Radio_ServoStatus(ENABLE);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
 
   /* USER CODE END 2 */
 
-  /* Init code generated for FreeRTOS */
+  /* Code generated for FreeRTOS */
   /* Create Start thread */
   osThreadDef(USER_Thread, StartThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
   osThreadCreate (osThread(USER_Thread), NULL);
@@ -136,8 +129,8 @@ int main(void)
 void SystemClock_Config(void)
 {
 
-  RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  RCC_OscInitTypeDef RCC_OscInitStruct;
 
   __PWR_CLK_ENABLE();
 
@@ -183,8 +176,7 @@ void vApplicationStackOverflowHook(TaskHandle_t xTask __attribute__((unused)),
 }
 /* USER CODE END 4 */
 
-static void StartThread(void const * argument)
-{
+static void StartThread(void const * argument) {
 
   /* USER CODE BEGIN 5 */
 
@@ -214,6 +206,7 @@ static void StartThread(void const * argument)
   /* USER CODE END 5 */ 
 
 }
+ 
 
 #ifdef USE_FULL_ASSERT
 
