@@ -31,6 +31,7 @@ void DeadReckoningThread(void const * argument __attribute__((unused))) {
 
 	int16_t accelero[3];
 	float gyro[3];
+	float gyroAVG[3] = {0.0f};
 
 	char outputBuffer[64];
 	uint16_t i = 0;
@@ -43,12 +44,30 @@ void DeadReckoningThread(void const * argument __attribute__((unused))) {
 	osDelay(300);
 	beta = 0.033f;
 
+	for(i = 0; i<100; i++) {
+		BSP_GYRO_GetXYZ(gyro);
+		gyroAVG[0] += gyro[0];
+		gyroAVG[1] += gyro[1];
+		gyroAVG[2] += gyro[2];
+		osDelay(6);
+	}
+	gyroAVG[0] *= 0.01f;
+	gyroAVG[1] *= 0.01f;
+	gyroAVG[2] *= 0.01f;
+
 	previousWakeTime = osKernelSysTick();
 	for (;;) {
 		osDelayUntil(&previousWakeTime, TIME_STEP_MS);
 
 		BSP_ACCELERO_GetXYZ(accelero);
 		BSP_GYRO_GetXYZ(gyro);
+		gyro[0] -= gyroAVG[0];
+		gyro[1] -= gyroAVG[1];
+		gyro[2] -= gyroAVG[2];
+
+		//gyro[1] *= -1.0;
+		gyro[2] *= -1.0;
+
 
 		int16_t v = BSP_Encoder_GetVelocity();
 		float ds = v * METER_PER_INCR;
@@ -68,7 +87,7 @@ void DeadReckoningThread(void const * argument __attribute__((unused))) {
 
 			if (++i > 10) {
 				if (printState == ENABLE) {
-					sprintf(outputBuffer, "C,%4.2f,%4.2f,%4.2f\r\n", x, y, theta);
+					sprintf(outputBuffer, "C,%.4f,%.4f,%.4f\r\n", x, y, theta);
 					SendString(outputBuffer);
 				}
 				i = 0;
@@ -90,7 +109,7 @@ void setPrintConfig(char state) {
 void printConfig() {
 	char outputBuffer[64];
 	if(configMutex && osMutexWait(configMutex, 2) == osOK) {
-		sprintf(outputBuffer, "O,%4.2f,%4.2f,%4.2f\r\n", x, y, theta);
+		sprintf(outputBuffer, "O,%.4f,%.4f,%.4f\r\n", x, y, theta);
 		SendString(outputBuffer);
 		osMutexRelease(configMutex);
 	}

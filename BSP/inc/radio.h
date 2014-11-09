@@ -16,8 +16,8 @@
 
 #define RADIO_MOTOR_MAX		500
 
-#define RAD_PER_DIGIT		-6.996667e-4f
-#define DIGIT_PER_RAD		-1429.25f
+#define RAD_PER_DIGIT		6.996667e-4f
+#define DIGIT_PER_RAD		1429.25f
 
 void BSP_Radio_Init(void);
 int16_t BSP_Radio_GetSteer(void);

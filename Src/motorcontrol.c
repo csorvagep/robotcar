@@ -17,22 +17,23 @@
 #define MAX_OUTPUT				450
 #define MIN_OUTPUT				-450
 
-#define ZD 						0.992f
-#define KC						2.4851f //Tcl = 500ms#define ZERO_TRESHOLD			8
+#define ZD 						0.98145f
+#define KC						1.9f //2.4851f //Tcl = 500ms
+
 #define RC_FORWARD_TRESHOLD		25
 #define RC_1_MOTOR_MAX			0.002f
 
 #define LOOKUP_MAX				7
-static const int16_t lookUpUMax[LOOKUP_MAX] = { 42, 48, 94, 177, 251, 325, 390 };
-static const int16_t lookUpYMax[LOOKUP_MAX] = { 46, 50, 70, 95, 120, 145, 170 };
-static const float lookUpKMax[LOOKUP_MAX] = { 0.67, 0.434783, 0.301205, 0.337838, 0.337838,
+static const int16_t lookUpUMax[LOOKUP_MAX] = { 5, 48, 94, 177, 251, 325, 390 };
+static const int16_t lookUpYMax[LOOKUP_MAX] = { 25, 50, 70, 95, 120, 145, 170 };
+static const float lookUpKMax[LOOKUP_MAX] = { 0.5813, 0.434783, 0.301205, 0.337838, 0.337838,
 		0.384615, 0.384615 };
 
 static float refV = 0.0f;
 static float refPhi = 0.0f;
 static osMutexId refMutex = NULL;
 
-static FunctionalState remoteControllerState = ENABLE;
+static FunctionalState remoteControllerState = DISABLE;
 static volatile FunctionalState printState = DISABLE;
 
 typedef enum {
@@ -56,7 +57,7 @@ void MotorThread(void const * argument __attribute__((unused)))
 	int32_t uk = 0, u = 0;
 
 	/* RC-Mode variables */
-	mcState_Typedef state = rcInit;
+	mcState_Typedef state = mcOff;
 	int16_t prevMotor = 0;
 
 	/* Thread Init */
@@ -71,12 +72,10 @@ void MotorThread(void const * argument __attribute__((unused)))
 		if(prevRemoteState != remoteControllerState) {
 			if(remoteControllerState) {
 				state = rcInit;
-				//BSP_Radio_ConnectServo(ENABLE);
 			} else {
 				state = mcOff;
 				BSP_Motor_SetState(DISABLE);
 				BSP_Motor_SetSpeed(0);
-				//BSP_Radio_ConnectServo(DISABLE);
 			}
 			prevRemoteState = remoteControllerState;
 		}
@@ -110,7 +109,10 @@ void MotorThread(void const * argument __attribute__((unused)))
 					state = rcStop;
 					BSP_Motor_SetState(DISABLE);
 				} else {
-					v = motor * RC_1_MOTOR_MAX * MAX_VELOCITY;
+					if(motor < 0)
+						v = (motor + RC_FORWARD_TRESHOLD) * RC_1_MOTOR_MAX * MAX_VELOCITY;
+					else
+						v = (motor - RC_FORWARD_TRESHOLD) * RC_1_MOTOR_MAX * MAX_VELOCITY;
 				}
 				prevMotor = motor;
 				break;
@@ -178,10 +180,9 @@ void MotorThread(void const * argument __attribute__((unused)))
 		if(!remoteControllerState)
 			BSP_Radio_SetPhi(refPhi);
 
-		if(++i > 10) {
+		if(++i > 5) {
 			if(printState == ENABLE) {
-				sprintf(outputBuffer, "M,%ld,%ld,%d\r\n", (int32_t) ek, u,
-						BSP_Encoder_GetVelocity());
+				sprintf(outputBuffer, "M,%.3f,%.3f,%.3f\r\n", ek, uc1, uc2);
 				SendString(outputBuffer);
 			}
 			i = 0;
@@ -200,15 +201,12 @@ int32_t calculateU(int32_t uv)
 		uv *= -1;
 	}
 
-	if(uv < ZERO_TRESHOLD)
-		return 0;
-
 	while(i < LOOKUP_MAX && lookUpUMax[i] < uv) {
 		i++;
 	}
 
 	if(i == 0) {
-		uv = lookUpYMax[0];
+		uv = 0;
 	} else {
 		uv = (int32_t) (lookUpKMax[i - 1] * (uv - lookUpUMax[i - 1]) + lookUpYMax[i - 1] + 0.5);
 	}
