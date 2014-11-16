@@ -1,5 +1,5 @@
 #MicroXplorer Configuration settings - do not modify
-#Sun Nov 16 15:16:32 CET 2014
+#Sun Nov 16 17:51:21 CET 2014
 ADC1.AutoInjectedConv-9\#ChannelInjectedConversion=DISABLE
 ADC1.AutoInjectedConv-ADC_Injected_ConversionMode=DISABLE
 ADC1.Channel=ADC_CHANNEL_8
@@ -160,6 +160,7 @@ NVIC.PriorityGroup=NVIC_PRIORITYGROUP_4
 NVIC.SPI2_IRQn=true\:7\:0
 NVIC.SysTick_IRQn=true\:7\:0
 NVIC.TIM4_IRQn=true\:7\:0
+NVIC.TIM5_IRQn=true\:7\:0
 NVIC.TIM6_DAC_IRQn=true\:7\:0
 PA0-WKUP.GPIOParameters=GPIO_PuPd,GPIO_ModeDefaultEXTI
 PA0-WKUP.GPIO_ModeDefaultEXTI=GPIO_MODE_IT_RISING
@@ -355,7 +356,7 @@ RCC.HSIState-ClockTree=RCC_HSI_OFF
 RCC.HSI_VALUE=16000000
 RCC.I2SClocksFreq_Value=96000000
 RCC.I2SEnable-ClockTree=false
-RCC.IPParameters=PLLSource,LSI_VALUE,APB1TimFreq_Value,APB2Freq_Value,MCO2PinFreq_Value,OscillatorTypeHSE-ClockTree,APB1CLKDivider,USBFSEnable-ClockTree,USBHSEnable-ClockTree,FCLKCortexFreq_Value,OscillatorTypeLSI-ClockTree,48MHZClocksFreq_Value,AHBFreq_Value,VCOInputFreq_Value,PLLSourceVirtual,I2SClocksFreq_Value,ClockTypePCLK1-ClockTree,SYSCLKFreq_VALUE,PLLQ,SYSCLKSource,HSIState-ClockTree,LSE_VALUE,HSE_VALUE,MCO1OutPutEnable-ClockTree,HSI_VALUE,IWDGEnable-ClockTree,EnableLSERTC-ClockTree,RNGEnable-ClockTree,VCOI2SOutputFreq_Value,MCO2OutPutEnable-ClockTree,ClockTypePCLK2-ClockTree,PLLCLKFreq_Value,RTCEnable-ClockTree,EnableHSERTCDevisor-ClockTree,RTCFreq_Value,FamilyName,FLatency-AdvancedSettings,HCLKFreq_Value,I2SEnable-ClockTree,EthernetFreq_Value,APB2CLKDivider,PLLM,EnableLSE-ClockTree,PLLN,VCOOutputFreq_Value,ClockTypeSysClk-ClockTree,EnableHSE-ClockTree,VcooutputI2S,CortexFreq_Value,EnableExtClockForI2S-ClockTree,APB1Freq_Value,PWR_Regulator_Voltage_Scale-AdvancedSettings,SDIOEnable-ClockTree,LSIState-ClockTree,PLLState-ClockTree,RTCHSEDivFreq_Value,HSEState-ClockTree,ExtClockEnable-ClockTree,APB2TimFreq_Value
+RCC.IPParameters=PLLSource,LSI_VALUE,APB1TimFreq_Value,MCO2PinFreq_Value,APB2Freq_Value,OscillatorTypeHSE-ClockTree,APB1CLKDivider,USBFSEnable-ClockTree,USBHSEnable-ClockTree,FCLKCortexFreq_Value,OscillatorTypeLSI-ClockTree,AHBFreq_Value,48MHZClocksFreq_Value,VCOInputFreq_Value,I2SClocksFreq_Value,PLLSourceVirtual,ClockTypePCLK1-ClockTree,SYSCLKFreq_VALUE,PLLQ,SYSCLKSource,HSIState-ClockTree,LSE_VALUE,HSE_VALUE,MCO1OutPutEnable-ClockTree,HSI_VALUE,IWDGEnable-ClockTree,EnableLSERTC-ClockTree,RNGEnable-ClockTree,VCOI2SOutputFreq_Value,MCO2OutPutEnable-ClockTree,ClockTypePCLK2-ClockTree,PLLCLKFreq_Value,RTCEnable-ClockTree,EnableHSERTCDevisor-ClockTree,RTCFreq_Value,FamilyName,FLatency-AdvancedSettings,HCLKFreq_Value,I2SEnable-ClockTree,EthernetFreq_Value,APB2CLKDivider,PLLM,EnableLSE-ClockTree,PLLN,VCOOutputFreq_Value,ClockTypeSysClk-ClockTree,EnableHSE-ClockTree,VcooutputI2S,CortexFreq_Value,EnableExtClockForI2S-ClockTree,APB1Freq_Value,PWR_Regulator_Voltage_Scale-AdvancedSettings,SDIOEnable-ClockTree,LSIState-ClockTree,PLLState-ClockTree,RTCHSEDivFreq_Value,HSEState-ClockTree,ExtClockEnable-ClockTree,APB2TimFreq_Value
 RCC.IWDGEnable-ClockTree=false
 RCC.LSE_VALUE=32768
 RCC.LSIState-ClockTree=RCC_LSI_OFF
@@ -441,7 +442,7 @@ TIM4.ICPolarity_CH3-Input_Capture3_from_TI3=TIM_INPUTCHANNELPOLARITY_FALLING
 TIM4.ICSelection-Input_Capture1_from_TI2=TIM_ICSELECTION_INDIRECTTI
 TIM4.ICSelection-Input_Capture2_from_TI2=TIM_ICSELECTION_DIRECTTI
 TIM4.ICSelection-Input_Capture3_from_TI3=TIM_ICSELECTION_DIRECTTI
-TIM4.IPParameters=Channel-Input_Capture2_from_TI2,Pulse-PWM Generation4 CH4,ICSelection-Input_Capture3_from_TI3,ICSelection-Input_Capture2_from_TI2,Period,Channel-PWM Generation4 CH4,ICPolarity_CH3-Input_Capture3_from_TI3,Channel-Input_Capture1_from_TI2,ICSelection-Input_Capture1_from_TI2,Prescaler,TIM_SlaveMode-TriggerSource_TI2FP2,OCFastMode_PWM-PWM Generation4 CH4,Channel-Input_Capture3_from_TI3,ICPolarity_CH1-Input_Capture1_from_TI2
+TIM4.IPParameters=Channel-Input_Capture2_from_TI2,ICSelection-Input_Capture3_from_TI3,Pulse-PWM Generation4 CH4,ICSelection-Input_Capture2_from_TI2,Period,Channel-PWM Generation4 CH4,ICPolarity_CH3-Input_Capture3_from_TI3,Channel-Input_Capture1_from_TI2,ICSelection-Input_Capture1_from_TI2,Prescaler,TIM_SlaveMode-TriggerSource_TI2FP2,OCFastMode_PWM-PWM Generation4 CH4,Channel-Input_Capture3_from_TI3,ICPolarity_CH1-Input_Capture1_from_TI2
 TIM4.OCFastMode_PWM-PWM\ Generation4\ CH4=TIM_OCFAST_DISABLE
 TIM4.Period=65535
 TIM4.Prescaler=83

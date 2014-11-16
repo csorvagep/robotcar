@@ -19,5 +19,6 @@ void BSP_Encoder_Init(void);
 int32_t BSP_Encoder_GetPosition(void);
 int16_t BSP_Encoder_GetVelocity(void);
 void BSP_Encoder_Reset(void);
+void BSP_Encoder_TimerCallback(void);
 
 #endif /* ENCODER_H_ */
