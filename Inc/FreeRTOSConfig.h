@@ -62,7 +62,7 @@
 /**
   ******************************************************************************
   * File Name          : FreeRTOSConfig.h
-  * Date               : 08/11/2014 12:41:12
+  * Date               : 16/11/2014 15:16:33
   ******************************************************************************
   */
 
@@ -101,9 +101,9 @@
 #define configIDLE_SHOULD_YIELD           1
 #define configUSE_MUTEXES                 1
 #define configQUEUE_REGISTRY_SIZE         8
-#define configCHECK_FOR_STACK_OVERFLOW    0
+#define configCHECK_FOR_STACK_OVERFLOW    2
 #define configUSE_RECURSIVE_MUTEXES       1
-#define configUSE_MALLOC_FAILED_HOOK      0
+#define configUSE_MALLOC_FAILED_HOOK      1
 #define configUSE_APPLICATION_TASK_TAG    0
 #define configUSE_COUNTING_SEMAPHORES     1
 #define configGENERATE_RUN_TIME_STATS     0
@@ -120,7 +120,7 @@
 
 /* Set the following definitions to 1 to include the API function, or zero
 to exclude the API function. */
-#define INCLUDE_vTaskPrioritySet       0
+#define INCLUDE_vTaskPrioritySet       1
 #define INCLUDE_uxTaskPriorityGet      1
 #define INCLUDE_vTaskDelete            0
 #define INCLUDE_vTaskCleanUpResources  0

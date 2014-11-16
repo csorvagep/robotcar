@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 08/11/2014 12:41:13
+  * Date               : 16/11/2014 15:16:35
   * Description        : Main program body
   ******************************************************************************
   *
@@ -37,11 +37,28 @@
 #include "cmsis_os.h"
 #include "adc.h"
 #include "dma.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
+/* USER CODE BEGIN Includes */
+
+/* USER CODE END Includes */
+
 /* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void StartThread(void const * argument);
+
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
 #include "encoder.h"
@@ -58,10 +75,6 @@
 
 /* USER CODE END 0 */
 
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void StartThread(void const * argument);
-
 int main(void)
 {
 
@@ -77,18 +90,16 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* System interrupt init*/
-  /* Sets the priority grouping field */
-  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
-
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_ADC1_Init();
+  MX_ADC2_Init();
+  MX_SPI2_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
   MX_TIM4_Init();
+  MX_TIM5_Init();
   MX_TIM6_Init();
   MX_USART3_UART_Init();
 
@@ -104,9 +115,26 @@ int main(void)
 	BSP_Radio_ServoStatus(ENABLE);
 	//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
 
+
+	/* Analog sensors (battery) */
+	osThreadDef(ANALOG_Thread, AnalogThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
+	osThreadCreate(osThread(ANALOG_Thread), NULL);
+
+	/* Communication thread */
+	osThreadDef(COMM_Thread, CommThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 128);
+	osThreadCreate(osThread(COMM_Thread), NULL);
+
+	/* Motor controller thread */
+	osThreadDef(MOTOR_Thread, MotorThread, osPriorityAboveNormal, 0, configMINIMAL_STACK_SIZE + 48);
+	osThreadCreate(osThread(MOTOR_Thread), NULL);
+
+	/* Dead-reckoning */
+	osThreadDef(DR_Thread, DeadReckoningThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 128);
+	osThreadCreate(osThread(DR_Thread), NULL);
+
   /* USER CODE END 2 */
 
-  /* Code generated for FreeRTOS */
+  /* Init code generated for FreeRTOS */
   /* Create Start thread */
   osThreadDef(USER_Thread, StartThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
   osThreadCreate (osThread(USER_Thread), NULL);
@@ -129,8 +157,8 @@ int main(void)
 void SystemClock_Config(void)
 {
 
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
   RCC_OscInitTypeDef RCC_OscInitStruct;
+  RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
   __PWR_CLK_ENABLE();
 
@@ -168,37 +196,16 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin __attribute__((unused))) {
 		//BSP_Radio_ConnectServo(ENABLE);
 	}
 }
-
-void vApplicationStackOverflowHook(TaskHandle_t xTask __attribute__((unused)),
-		signed char *pcTaskName __attribute__((unused))) {
-	while (1) {
-	}
-}
 /* USER CODE END 4 */
 
-static void StartThread(void const * argument) {
+static void StartThread(void const * argument)
+{
 
   /* USER CODE BEGIN 5 */
-
-	/* Communication thread */
-	osThreadDef(COMM_Thread, CommThread, osPriorityAboveNormal, 0, configMINIMAL_STACK_SIZE + 128);
-	osThreadCreate(osThread(COMM_Thread), NULL);
-
-	/* Motor controller thread */
-	osThreadDef(MOTOR_Thread, MotorThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 48);
-	osThreadCreate(osThread(MOTOR_Thread), NULL);
-
-	/* Analog sensors (battery) */
-	osThreadDef(ANALOG_Thread, AnalogThread, osPriorityBelowNormal, 0, configMINIMAL_STACK_SIZE);
-	osThreadCreate(osThread(ANALOG_Thread), NULL);
-
-	/* Dead-reckoning */
-	osThreadDef(DR_Thread, DeadReckoningThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 256);
-	osThreadCreate(osThread(DR_Thread), NULL);
-
+	osThreadSetPriority(NULL, osPriorityLow);
 	/* Infinite loop */
 	for (;;) {
-		osDelay(250);
+		osDelay(500);
 
 		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
 	}
@@ -206,7 +213,6 @@ static void StartThread(void const * argument) {
   /* USER CODE END 5 */ 
 
 }
- 
 
 #ifdef USE_FULL_ASSERT
 
@@ -222,8 +228,13 @@ void assert_failed(uint8_t* file, uint32_t line)
   /* USER CODE BEGIN 6 */
 /* User can add his own implementation to report the file name and line number,
 ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-while (1)
-;
+	uint32_t i = 0;
+while (1) {
+	if(++i >= 0x7ffff) {
+		HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
+		i = 0;
+	}
+}
   /* USER CODE END 6 */
 
 }

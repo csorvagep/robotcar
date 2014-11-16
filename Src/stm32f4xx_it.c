@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_it.c
-  * @date    08/11/2014 12:41:13
+  * @date    16/11/2014 15:16:35
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
@@ -35,11 +35,16 @@
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx.h"
 #include "stm32f4xx_it.h"
+#include "cmsis_os.h"
+/* USER CODE BEGIN 0 */
 
+/* USER CODE END 0 */
 /* External variables --------------------------------------------------------*/
  
 extern void xPortSysTickHandler(void);
 
+extern DMA_HandleTypeDef hdma_adc1;
+extern SPI_HandleTypeDef hspi2;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim6;
 extern DMA_HandleTypeDef hdma_usart3_tx;
@@ -50,13 +55,18 @@ extern DMA_HandleTypeDef hdma_usart3_rx;
 /******************************************************************************/
 
 /**
-* @brief This function handles EXTI Line0 interrupt.
+* @brief This function handles DMA2 Stream0 global interrupt.
 */
-void EXTI0_IRQHandler(void)
+void DMA2_Stream0_IRQHandler(void)
 {
-  HAL_NVIC_ClearPendingIRQ(EXTI0_IRQn);
-  
-  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+  /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream0_IRQn 0 */
+  HAL_NVIC_ClearPendingIRQ(DMA2_Stream0_IRQn);
+  HAL_DMA_IRQHandler(&hdma_adc1);
+  /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
+
+  /* USER CODE END DMA2_Stream0_IRQn 1 */
 }
 
 /**
@@ -64,17 +74,14 @@ void EXTI0_IRQHandler(void)
 */
 void TIM6_DAC_IRQHandler(void)
 {
+  /* USER CODE BEGIN TIM6_DAC_IRQn 0 */
+
+  /* USER CODE END TIM6_DAC_IRQn 0 */
   HAL_NVIC_ClearPendingIRQ(TIM6_DAC_IRQn);
   HAL_TIM_IRQHandler(&htim6);
-}
+  /* USER CODE BEGIN TIM6_DAC_IRQn 1 */
 
-/**
-* @brief This function handles System tick timer.
-*/
-void SysTick_Handler(void)
-{
-  xPortSysTickHandler();
-  HAL_IncTick();
+  /* USER CODE END TIM6_DAC_IRQn 1 */
 }
 
 /**
@@ -82,8 +89,46 @@ void SysTick_Handler(void)
 */
 void DMA1_Stream3_IRQHandler(void)
 {
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream3_IRQn 0 */
   HAL_NVIC_ClearPendingIRQ(DMA1_Stream3_IRQn);
   HAL_DMA_IRQHandler(&hdma_usart3_tx);
+  /* USER CODE BEGIN DMA1_Stream3_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream3_IRQn 1 */
+}
+
+/**
+* @brief This function handles EXTI Line0 interrupt.
+*/
+void EXTI0_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
+
+  /* USER CODE END EXTI0_IRQn 0 */
+  HAL_NVIC_ClearPendingIRQ(EXTI0_IRQn);
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
+
+  /* USER CODE END EXTI0_IRQn 1 */
+}
+
+/**
+* @brief This function handles System tick timer.
+*/
+void SysTick_Handler(void)
+{
+  /* USER CODE BEGIN SysTick_IRQn 0 */
+
+  /* USER CODE END SysTick_IRQn 0 */
+  if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED) {
+    xPortSysTickHandler();
+  }
+  HAL_IncTick();
+  /* USER CODE BEGIN SysTick_IRQn 1 */
+
+  /* USER CODE END SysTick_IRQn 1 */
 }
 
 /**
@@ -91,8 +136,14 @@ void DMA1_Stream3_IRQHandler(void)
 */
 void DMA1_Stream1_IRQHandler(void)
 {
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream1_IRQn 0 */
   HAL_NVIC_ClearPendingIRQ(DMA1_Stream1_IRQn);
   HAL_DMA_IRQHandler(&hdma_usart3_rx);
+  /* USER CODE BEGIN DMA1_Stream1_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream1_IRQn 1 */
 }
 
 /**
@@ -100,8 +151,32 @@ void DMA1_Stream1_IRQHandler(void)
 */
 void TIM4_IRQHandler(void)
 {
+  /* USER CODE BEGIN TIM4_IRQn 0 */
+
+  /* USER CODE END TIM4_IRQn 0 */
   HAL_NVIC_ClearPendingIRQ(TIM4_IRQn);
   HAL_TIM_IRQHandler(&htim4);
+  /* USER CODE BEGIN TIM4_IRQn 1 */
+
+  /* USER CODE END TIM4_IRQn 1 */
 }
 
+/**
+* @brief This function handles SPI2 global interrupt.
+*/
+void SPI2_IRQHandler(void)
+{
+  /* USER CODE BEGIN SPI2_IRQn 0 */
+
+  /* USER CODE END SPI2_IRQn 0 */
+  HAL_NVIC_ClearPendingIRQ(SPI2_IRQn);
+  HAL_SPI_IRQHandler(&hspi2);
+  /* USER CODE BEGIN SPI2_IRQn 1 */
+
+  /* USER CODE END SPI2_IRQn 1 */
+}
+
+/* USER CODE BEGIN 1 */
+
+/* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

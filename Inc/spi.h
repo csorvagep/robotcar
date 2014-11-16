@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * File Name          : ADC.h
-  * Date               : 16/11/2014 15:16:33
+  * File Name          : SPI.h
+  * Date               : 16/11/2014 15:16:34
   * Description        : This file provides code for the configuration
-  *                      of the ADC instances.
+  *                      of the SPI instances.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2014 STMicroelectronics
@@ -33,8 +33,8 @@
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __adc_H
-#define __adc_H
+#ifndef __spi_H
+#define __spi_H
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -42,16 +42,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
-extern ADC_HandleTypeDef hadc1;
-extern ADC_HandleTypeDef hadc2;
+extern SPI_HandleTypeDef hspi2;
 
-void MX_ADC1_Init(void);
-void MX_ADC2_Init(void);
+void MX_SPI2_Init(void);
 
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ adc_H */
+#endif /*__ spi_H */
 
 /**
   * @}

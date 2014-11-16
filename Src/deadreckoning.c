@@ -39,8 +39,6 @@ void DeadReckoningThread(void const * argument __attribute__((unused))) {
 	configMutex = osMutexCreate(NULL);
 	configASSERT(configMutex);
 
-	BSP_ACCELERO_Reset();
-	BSP_GYRO_Reset();
 	osDelay(300);
 	beta = 0.033f;
 
