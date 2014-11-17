@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : USART.c
-  * Date               : 16/11/2014 15:16:34
+  * Date               : 17/11/2014 12:05:52
   * Description        : This file provides code for the configuration
   *                      of the USART instances.
   ******************************************************************************
@@ -116,9 +116,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     hdma_usart3_rx.Init.Mode = DMA_CIRCULAR;
     hdma_usart3_rx.Init.Priority = DMA_PRIORITY_HIGH;
     hdma_usart3_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    hdma_usart3_rx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_HALFFULL;
-    hdma_usart3_rx.Init.MemBurst = DMA_MBURST_SINGLE;
-    hdma_usart3_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
     HAL_DMA_Init(&hdma_usart3_rx);
 
     __HAL_LINKDMA(huart,hdmarx,hdma_usart3_rx);

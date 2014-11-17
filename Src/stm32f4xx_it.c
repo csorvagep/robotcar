@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_it.c
-  * @date    16/11/2014 17:51:24
+  * @date    17/11/2014 15:10:01
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
@@ -44,7 +44,8 @@
  
 extern void xPortSysTickHandler(void);
 
-extern DMA_HandleTypeDef hdma_adc1;
+extern ADC_HandleTypeDef hadc1;
+extern ADC_HandleTypeDef hadc2;
 extern SPI_HandleTypeDef hspi2;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
@@ -57,18 +58,19 @@ extern DMA_HandleTypeDef hdma_usart3_rx;
 /******************************************************************************/
 
 /**
-* @brief This function handles DMA2 Stream0 global interrupt.
+* @brief This function handles ADC1, ADC2 and ADC3 global interrupts.
 */
-void DMA2_Stream0_IRQHandler(void)
+void ADC_IRQHandler(void)
 {
-  /* USER CODE BEGIN DMA2_Stream0_IRQn 0 */
+  /* USER CODE BEGIN ADC_IRQn 0 */
 
-  /* USER CODE END DMA2_Stream0_IRQn 0 */
-  HAL_NVIC_ClearPendingIRQ(DMA2_Stream0_IRQn);
-  HAL_DMA_IRQHandler(&hdma_adc1);
-  /* USER CODE BEGIN DMA2_Stream0_IRQn 1 */
+  /* USER CODE END ADC_IRQn 0 */
+  HAL_NVIC_ClearPendingIRQ(ADC_IRQn);
+  HAL_ADC_IRQHandler(&hadc1);
+  HAL_ADC_IRQHandler(&hadc2);
+  /* USER CODE BEGIN ADC_IRQn 1 */
 
-  /* USER CODE END DMA2_Stream0_IRQn 1 */
+  /* USER CODE END ADC_IRQn 1 */
 }
 
 /**
@@ -198,7 +200,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	if(htim->Instance == TIM6) {
 		BSP_Encoder_TimerCallback();
 	} else if(htim->Instance == TIM5) {
-		BSP_Line_TimerCallback();
+		//BSP_Line_TimerCallback();
 	}
 }
 /* USER CODE END 1 */

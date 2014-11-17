@@ -182,8 +182,8 @@ void MX_TIM5_Init(void)
   sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
   HAL_TIM_ConfigClockSource(&htim5, &sClockSourceConfig);
 
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_ENABLE;
   HAL_TIMEx_MasterConfigSynchronization(&htim5, &sMasterConfig);
 
 }
@@ -294,7 +294,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* Peripheral interrupt init*/
-    HAL_NVIC_SetPriority(TIM4_IRQn, 7, 0);
+    HAL_NVIC_SetPriority(TIM4_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(TIM4_IRQn);
   /* USER CODE BEGIN TIM4_MspInit 1 */
 
@@ -309,7 +309,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
     __TIM5_CLK_ENABLE();
 
     /* Peripheral interrupt init*/
-    HAL_NVIC_SetPriority(TIM5_IRQn, 7, 0);
+    HAL_NVIC_SetPriority(TIM5_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(TIM5_IRQn);
   /* USER CODE BEGIN TIM5_MspInit 1 */
 
@@ -324,7 +324,7 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* htim_base)
     __TIM6_CLK_ENABLE();
 
     /* Peripheral interrupt init*/
-    HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 7, 0);
+    HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
   /* USER CODE BEGIN TIM6_MspInit 1 */
 

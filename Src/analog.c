@@ -16,14 +16,18 @@ static volatile FunctionalState printState = DISABLE;
 
 void AnalogThread(void const * argument __attribute__((unused))) {
 	uint32_t previousWakeTime = osKernelSysTick();
+	osSemaphoreId lineReadReadySemaphore = NULL;
+
+	lineReadReadySemaphore = osSemaphoreCreate(NULL, 1);
 //	uint32_t vbatm, vbate;
 //	char outputBuffer[16];
 //	uint8_t i = 0;
 
 	for (;;) {
-		osDelayUntil(&previousWakeTime, 10);
+		osDelayUntil(&previousWakeTime, 100);
 
-		BSP_Line_StartMeasure();
+		BSP_Line_StartMeasure(lineReadReadySemaphore);
+		osSemaphoreWait(lineReadReadySemaphore, 5);
 
 //		vbatm = BSP_Sensor_GetVBATM() * 9000 >> 12; //divide by 4096
 //		vbate = BSP_Sensor_GetVBATE() * 9000 >> 12; //divide by 4096

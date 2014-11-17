@@ -88,7 +88,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* hspi)
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
     /* Peripheral interrupt init*/
-    HAL_NVIC_SetPriority(SPI2_IRQn, 7, 0);
+    HAL_NVIC_SetPriority(SPI2_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(SPI2_IRQn);
   /* USER CODE BEGIN SPI2_MspInit 1 */
 
