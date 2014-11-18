@@ -110,6 +110,7 @@ int main(void)
 	BSP_Sensor_Init();
 	BSP_ACCELERO_Init();
 	BSP_GYRO_Init();
+	BSP_Line_Init();
 
 	BSP_Radio_ConnectServo(ENABLE);
 	BSP_Radio_ServoStatus(ENABLE);

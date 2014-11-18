@@ -120,6 +120,9 @@ void ProcessCommand(void) {
 		setPhi(y);
 		printConfig();
 		break;
+	case 'L':
+		setPrintLine(internalBuffer[2]);
+		break;
 	case 'M':
 		setPrintMotor(internalBuffer[2]);
 		break;
