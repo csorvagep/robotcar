@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    stm32f4xx_it.c
-  * @date    17/11/2014 15:10:01
+  * @date    21/11/2014 14:16:56
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
@@ -48,7 +48,6 @@ extern ADC_HandleTypeDef hadc1;
 extern ADC_HandleTypeDef hadc2;
 extern SPI_HandleTypeDef hspi2;
 extern TIM_HandleTypeDef htim4;
-extern TIM_HandleTypeDef htim5;
 extern TIM_HandleTypeDef htim6;
 extern DMA_HandleTypeDef hdma_usart3_tx;
 extern DMA_HandleTypeDef hdma_usart3_rx;
@@ -163,21 +162,6 @@ void TIM4_IRQHandler(void)
   /* USER CODE BEGIN TIM4_IRQn 1 */
 
   /* USER CODE END TIM4_IRQn 1 */
-}
-
-/**
-* @brief This function handles TIM5 global interrupt.
-*/
-void TIM5_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM5_IRQn 0 */
-
-  /* USER CODE END TIM5_IRQn 0 */
-  HAL_NVIC_ClearPendingIRQ(TIM5_IRQn);
-  HAL_TIM_IRQHandler(&htim5);
-  /* USER CODE BEGIN TIM5_IRQn 1 */
-
-  /* USER CODE END TIM5_IRQn 1 */
 }
 
 /**

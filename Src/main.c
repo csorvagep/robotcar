@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 16/11/2014 15:16:35
+  * Date               : 21/11/2014 14:16:57
   * Description        : Main program body
   ******************************************************************************
   *
@@ -43,7 +43,18 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
+#include "encoder.h"
+#include "radio.h"
+#include "motor.h"
+#include "sensor.h"
+#include "linesensor.h"
+#include "stm32f4_discovery_accelerometer.h"
+#include "stm32f4_discovery_gyroscope.h"
 
+#include "communication.h"
+#include "motorcontrol.h"
+#include "analog.h"
+#include "deadreckoning.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -61,17 +72,6 @@ static void StartThread(void const * argument);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-#include "encoder.h"
-#include "radio.h"
-#include "motor.h"
-#include "sensor.h"
-#include "stm32f4_discovery_accelerometer.h"
-#include "stm32f4_discovery_gyroscope.h"
-
-#include "communication.h"
-#include "motorcontrol.h"
-#include "analog.h"
-#include "deadreckoning.h"
 
 /* USER CODE END 0 */
 

@@ -37,7 +37,7 @@ void BSP_Line_Init(void) {
 	AN_E_OFF();
 	SPI_OE_OFF();
 	SPI_LE_ON();
-	HAL_SPI_Transmit(&hspi2, (uint8_t *) (&spiInitVal), 2, HAL_MAX_DELAY);
+	//HAL_SPI_Transmit(&hspi2, (uint8_t *) (&spiInitVal), 2, HAL_MAX_DELAY);
 	SPI_LE_OFF();
 
 }
@@ -47,10 +47,10 @@ void BSP_Line_StartMeasure(osSemaphoreId semaphoreID) {
 	AN_E_ON();
 	SPI_LE_ON();
 	SPI_OE_ON();
-	HAL_SPI_Transmit_IT(&hspi2, (uint8_t *) LED_Sequence, 2);
+	//HAL_SPI_Transmit_IT(&hspi2, (uint8_t *) LED_Sequence, 2);
 	HAL_ADCEx_InjectedStart_IT(&hadc1);
 	HAL_ADCEx_InjectedStart_IT(&hadc2);
-	HAL_TIM_Base_Start(&htim5);
+	//HAL_TIM_Base_Start(&htim5);
 	readySem = semaphoreID;
 }
 
