@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : ADC.c
-  * Date               : 17/11/2014 15:10:00
+  * Date               : 21/11/2014 22:42:53
   * Description        : This file provides code for the configuration
   *                      of the ADC instances.
   ******************************************************************************
@@ -37,6 +37,7 @@
 #include "adc.h"
 
 #include "gpio.h"
+#include "dma.h"
 
 /* USER CODE BEGIN 0 */
 
@@ -44,83 +45,62 @@
 
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
+DMA_HandleTypeDef hdma_adc1;
 
 /* ADC1 init function */
 void MX_ADC1_Init(void)
 {
-  ADC_MultiModeTypeDef multimode;
   ADC_ChannelConfTypeDef sConfig;
-  ADC_InjectionConfTypeDef sConfigInjected;
 
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc1.Instance = ADC1;
   hadc1.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV2;
   hadc1.Init.Resolution = ADC_RESOLUTION8b;
-  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ScanConvMode = ENABLE;
   hadc1.Init.ContinuousConvMode = DISABLE;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
-  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
+  hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T3_TRGO;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc1.Init.NbrOfConversion = 1;
-  hadc1.Init.DMAContinuousRequests = DISABLE;
-  hadc1.Init.EOCSelection = EOC_SINGLE_CONV;
+  hadc1.Init.NbrOfConversion = 2;
+  hadc1.Init.DMAContinuousRequests = ENABLE;
+  hadc1.Init.EOCSelection = EOC_SEQ_CONV;
   HAL_ADC_Init(&hadc1);
-
-    /**Configure the ADC multi-mode 
-    */
-  multimode.Mode = ADC_DUALMODE_INJECSIMULT;
-  multimode.DMAAccessMode = ADC_DMAACCESSMODE_2;
-  multimode.TwoSamplingDelay = ADC_TWOSAMPLINGDELAY_5CYCLES;
-  HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode);
 
     /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
     */
-  sConfig.Channel = ADC_CHANNEL_8;
-  sConfig.Rank = 1;
+  sConfig.Channel = ADC_CHANNEL_15;
+  sConfig.Rank = 2;
   sConfig.SamplingTime = ADC_SAMPLETIME_56CYCLES;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
-    /**Configures for the selected ADC injected channel its corresponding rank in the sequencer and its sample time 
+    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
     */
-  sConfigInjected.InjectedChannel = ADC_CHANNEL_14;
-  sConfigInjected.InjectedRank = 1;
-  sConfigInjected.InjectedNbrOfConversion = 1;
-  sConfigInjected.InjectedSamplingTime = ADC_SAMPLETIME_28CYCLES;
-  sConfigInjected.ExternalTrigInjecConvEdge = ADC_EXTERNALTRIGINJECCONVEDGE_RISING;
-  sConfigInjected.ExternalTrigInjecConv = ADC_EXTERNALTRIGINJECCONV_T5_TRGO;
-  sConfigInjected.AutoInjectedConv = DISABLE;
-  sConfigInjected.InjectedDiscontinuousConvMode = DISABLE;
-  sConfigInjected.InjectedOffset = 0;
-  HAL_ADCEx_InjectedConfigChannel(&hadc1, &sConfigInjected);
+  sConfig.Channel = ADC_CHANNEL_14;
+  sConfig.Rank = 1;
+  HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
 }
 /* ADC2 init function */
 void MX_ADC2_Init(void)
 {
-  ADC_MultiModeTypeDef multimode;
   ADC_ChannelConfTypeDef sConfig;
-  ADC_InjectionConfTypeDef sConfigInjected;
 
     /**Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
     */
   hadc2.Instance = ADC2;
   hadc2.Init.ClockPrescaler = ADC_CLOCKPRESCALER_PCLK_DIV2;
-  hadc2.Init.Resolution = ADC_RESOLUTION8b;
-  hadc2.Init.ScanConvMode = DISABLE;
+  hadc2.Init.Resolution = ADC_RESOLUTION12b;
+  hadc2.Init.ScanConvMode = ENABLE;
   hadc2.Init.ContinuousConvMode = DISABLE;
   hadc2.Init.DiscontinuousConvMode = DISABLE;
+  hadc2.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc2.Init.NbrOfConversion = 1;
-  hadc2.Init.DMAContinuousRequests = DISABLE;
+  hadc2.Init.NbrOfConversion = 2;
+  hadc2.Init.DMAContinuousRequests = ENABLE;
   hadc2.Init.EOCSelection = EOC_SINGLE_CONV;
   HAL_ADC_Init(&hadc2);
-
-    /**Configure the ADC multi-mode 
-    */
-  multimode.Mode = ADC_DUALMODE_INJECSIMULT;
-  multimode.TwoSamplingDelay = ADC_TWOSAMPLINGDELAY_5CYCLES;
-  HAL_ADCEx_MultiModeConfigChannel(&hadc2, &multimode);
 
     /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
     */
@@ -129,16 +109,11 @@ void MX_ADC2_Init(void)
   sConfig.SamplingTime = ADC_SAMPLETIME_56CYCLES;
   HAL_ADC_ConfigChannel(&hadc2, &sConfig);
 
-    /**Configures for the selected ADC injected channel its corresponding rank in the sequencer and its sample time 
+    /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
     */
-  sConfigInjected.InjectedChannel = ADC_CHANNEL_15;
-  sConfigInjected.InjectedRank = 1;
-  sConfigInjected.InjectedNbrOfConversion = 1;
-  sConfigInjected.InjectedSamplingTime = ADC_SAMPLETIME_28CYCLES;
-  sConfigInjected.AutoInjectedConv = DISABLE;
-  sConfigInjected.InjectedDiscontinuousConvMode = DISABLE;
-  sConfigInjected.InjectedOffset = 0;
-  HAL_ADCEx_InjectedConfigChannel(&hadc2, &sConfigInjected);
+  sConfig.Channel = ADC_CHANNEL_8;
+  sConfig.Rank = 2;
+  HAL_ADC_ConfigChannel(&hadc2, &sConfig);
 
 }
 
@@ -156,21 +131,32 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
   
     /**ADC1 GPIO Configuration    
     PC4     ------> ADC1_IN14
-    PB0     ------> ADC1_IN8 
+    PC5     ------> ADC1_IN15 
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_4;
+    GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_0;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+    /* Peripheral DMA init*/
+  
+    hdma_adc1.Instance = DMA2_Stream0;
+    hdma_adc1.Init.Channel = DMA_CHANNEL_0;
+    hdma_adc1.Init.Direction = DMA_PERIPH_TO_MEMORY;
+    hdma_adc1.Init.PeriphInc = DMA_PINC_DISABLE;
+    hdma_adc1.Init.MemInc = DMA_MINC_ENABLE;
+    hdma_adc1.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    hdma_adc1.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    hdma_adc1.Init.Mode = DMA_CIRCULAR;
+    hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;
+    hdma_adc1.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    hdma_adc1.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_HALFFULL;
+    hdma_adc1.Init.MemBurst = DMA_MBURST_SINGLE;
+    hdma_adc1.Init.PeriphBurst = DMA_PBURST_SINGLE;
+    HAL_DMA_Init(&hdma_adc1);
 
-    /* Peripheral interrupt init*/
-    HAL_NVIC_SetPriority(ADC_IRQn, 7, 0);
-    HAL_NVIC_EnableIRQ(ADC_IRQn);
+    __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc1);
+
   /* USER CODE BEGIN ADC1_MspInit 1 */
 
   /* USER CODE END ADC1_MspInit 1 */
@@ -184,22 +170,14 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     __ADC2_CLK_ENABLE();
   
     /**ADC2 GPIO Configuration    
-    PC5     ------> ADC2_IN15
+    PB0     ------> ADC2_IN8
     PB1     ------> ADC2_IN9 
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_5;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = GPIO_PIN_1;
+    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-    /* Peripheral interrupt init*/
-    HAL_NVIC_SetPriority(ADC_IRQn, 7, 0);
-    HAL_NVIC_EnableIRQ(ADC_IRQn);
   /* USER CODE BEGIN ADC2_MspInit 1 */
 
   /* USER CODE END ADC2_MspInit 1 */
@@ -219,14 +197,12 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
   
     /**ADC1 GPIO Configuration    
     PC4     ------> ADC1_IN14
-    PB0     ------> ADC1_IN8 
+    PC5     ------> ADC1_IN15 
     */
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_4);
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_4|GPIO_PIN_5);
 
-    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_0);
-
-    /* Peripheral interrupt Deinit*/
-    HAL_NVIC_DisableIRQ(ADC_IRQn);
+    /* Peripheral DMA DeInit*/
+    HAL_DMA_DeInit(hadc->DMA_Handle);
   /* USER CODE BEGIN ADC1_MspDeInit 1 */
 
   /* USER CODE END ADC1_MspDeInit 1 */
@@ -240,15 +216,11 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef* hadc)
     __ADC2_CLK_DISABLE();
   
     /**ADC2 GPIO Configuration    
-    PC5     ------> ADC2_IN15
+    PB0     ------> ADC2_IN8
     PB1     ------> ADC2_IN9 
     */
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_5);
+    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_0|GPIO_PIN_1);
 
-    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_1);
-
-    /* Peripheral interrupt Deinit*/
-    HAL_NVIC_DisableIRQ(ADC_IRQn);
   /* USER CODE BEGIN ADC2_MspDeInit 1 */
 
   /* USER CODE END ADC2_MspDeInit 1 */

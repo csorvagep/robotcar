@@ -12,4 +12,5 @@
 
 void AnalogThread(void const * argument);
 void setPrintBattery(char state);
+void setPrintLine(char state);
 float getLinePos(void);

@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 21/11/2014 14:16:57
+  * Date               : 21/11/2014 22:42:58
   * Description        : Main program body
   ******************************************************************************
   *
@@ -37,6 +37,7 @@
 #include "cmsis_os.h"
 #include "adc.h"
 #include "dma.h"
+#include "i2c.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
@@ -95,11 +96,12 @@ int main(void)
   MX_DMA_Init();
   MX_ADC1_Init();
   MX_ADC2_Init();
+  MX_I2C1_Init();
   MX_SPI2_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
+  MX_TIM3_Init();
   MX_TIM4_Init();
-  MX_TIM5_Init();
   MX_TIM6_Init();
   MX_USART3_UART_Init();
 
@@ -115,7 +117,6 @@ int main(void)
 	BSP_Radio_ConnectServo(ENABLE);
 	BSP_Radio_ServoStatus(ENABLE);
 	//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
-
 
 	/* Analog sensors (battery) */
 	osThreadDef(ANALOG_Thread, AnalogThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
