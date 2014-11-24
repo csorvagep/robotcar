@@ -58,7 +58,7 @@ void MX_SPI2_Init(void)
   hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLED;
-  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_ENABLED;
+  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
   hspi2.Init.CRCPolynomial = 10;
   HAL_SPI_Init(&hspi2);
 

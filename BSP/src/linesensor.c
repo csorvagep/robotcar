@@ -52,7 +52,7 @@ void BSP_Line_StartMeasure(osSemaphoreId semaphoreID) {
 	HAL_SPI_Transmit_IT(&hspi2, (uint8_t *) LED_Sequence, 2);
 	//HAL_ADCEx_InjectedStart_IT(&hadc1);
 	//HAL_ADCEx_InjectedStart_IT(&hadc2);
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)tempAdc, 2);
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*) tempAdc, 2);
 	HAL_TIM_Base_Start(&htim3);
 	readySem = semaphoreID;
 }
@@ -67,13 +67,14 @@ void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi) {
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 	if (hadc->Instance == hadc1.Instance) {
-		adcData[sendCounter] = tempAdc[0];
-		adcData[sendCounter + SEQ_LEN] = tempAdc[1];
-		sendCounter++;
 		if (sendCounter < SEQ_LEN) {
-			SPI_LE_ON();
-			HAL_SPI_Transmit_IT(&hspi2,
-					(uint8_t *) (LED_Sequence + sendCounter), 2);
+			adcData[sendCounter] = tempAdc[0];
+			adcData[sendCounter + SEQ_LEN] = tempAdc[1];
+			if (++sendCounter != SEQ_LEN) {
+				SPI_LE_ON();
+				HAL_SPI_Transmit_IT(&hspi2,
+						(uint8_t *) (LED_Sequence + sendCounter), 2);
+			}
 		} else {
 			SPI_OE_OFF();
 			AN_E_OFF();

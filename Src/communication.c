@@ -36,6 +36,7 @@ void CommThread(void const * argument __attribute__((unused))) {
 	sendMutex = osMutexCreate(NULL);
 	configASSERT(sendMutex);
 
+	osDelay(2500);
 	BSP_BT_SendStr("AT+AB Bypass\r\n");
 	BSP_BT_Flush();
 	BSP_BT_SetLed();
