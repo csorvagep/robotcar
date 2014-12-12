@@ -24,14 +24,15 @@ static volatile FunctionalState printState = DISABLE;
 float x = 0.0f;
 float y = 0.0f;
 float theta = 0.0f;
+float gyro[3];
+float gyroAVG[3] = {0.0f};
 osMutexId configMutex = NULL;
+
+static void calcGyroAVG(void);
 
 void DeadReckoningThread(void const * argument __attribute__((unused))) {
 	uint32_t previousWakeTime;
-
 	int16_t accelero[3];
-	float gyro[3];
-	float gyroAVG[3] = {0.0f};
 
 	char outputBuffer[64];
 	uint16_t i = 0;
@@ -42,16 +43,7 @@ void DeadReckoningThread(void const * argument __attribute__((unused))) {
 	osDelay(300);
 	beta = 0.033f;
 
-	for(i = 0; i<100; i++) {
-		BSP_GYRO_GetXYZ(gyro);
-		gyroAVG[0] += gyro[0];
-		gyroAVG[1] += gyro[1];
-		gyroAVG[2] += gyro[2];
-		osDelay(6);
-	}
-	gyroAVG[0] *= 0.01f;
-	gyroAVG[1] *= 0.01f;
-	gyroAVG[2] *= 0.01f;
+	calcGyroAVG();
 
 	previousWakeTime = osKernelSysTick();
 	for (;;) {
@@ -63,7 +55,7 @@ void DeadReckoningThread(void const * argument __attribute__((unused))) {
 		gyro[1] -= gyroAVG[1];
 		gyro[2] -= gyroAVG[2];
 
-		//gyro[1] *= -1.0;
+		//Switch Y axis direction
 		gyro[2] *= -1.0;
 
 
@@ -125,11 +117,26 @@ void setConfig(float newX, float newY, float newTheta) {
 		theta = newTheta;
 
 		/* Set quaternion according to theta */
-		q0 = cosf(theta);
+		q0 = cosf(theta * -0.5f);
 		q1 = 0.0f;
 		q2 = 0.0f;
-		q3 = sinf(theta);
+		q3 = sinf(theta * -0.5f);
+
+		calcGyroAVG();
 
 		osMutexRelease(configMutex);
 	}
+}
+
+void calcGyroAVG(void) {
+	for(uint8_t i = 0; i<200; i++) {
+		BSP_GYRO_GetXYZ(gyro);
+		gyroAVG[0] += gyro[0];
+		gyroAVG[1] += gyro[1];
+		gyroAVG[2] += gyro[2];
+		osDelay(6);
+	}
+	gyroAVG[0] *= 0.005f;
+	gyroAVG[1] *= 0.005f;
+	gyroAVG[2] *= 0.005f;
 }
