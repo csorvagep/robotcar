@@ -5,7 +5,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT(c) 2014 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT(c) 2015 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -113,7 +113,7 @@
   * @brief Internal Low Speed oscillator (LSI) value.
   */
 #if !defined  (LSI_VALUE) 
- #define LSI_VALUE  ((uint32_t)40000)    
+ #define LSI_VALUE  ((uint32_t)32000)    
 #endif /* LSI_VALUE */                      /*!< Value of the Internal Low Speed oscillator in Hz
                                              The real value may vary depending on the variations
                                              in voltage and temperature.  */
@@ -142,7 +142,7 @@
   */     
   
 #define  VDD_VALUE					  ((uint32_t)3300) /*!< Value of VDD in mv */           
-#define  TICK_INT_PRIORITY            ((uint32_t)5)    /*!< tick interrupt priority */            
+#define  TICK_INT_PRIORITY            ((uint32_t)5)   /*!< tick interrupt priority */            
 #define  USE_RTOS                     0     
 #define  PREFETCH_ENABLE              1
 #define  INSTRUCTION_CACHE_ENABLE     1

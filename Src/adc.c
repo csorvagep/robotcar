@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
   * File Name          : ADC.c
-  * Date               : 21/11/2014 22:42:53
+  * Date               : 22/01/2015 14:49:33
   * Description        : This file provides code for the configuration
   *                      of the ADC instances.
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2014 STMicroelectronics
+  * COPYRIGHT(c) 2015 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -70,15 +70,15 @@ void MX_ADC1_Init(void)
 
     /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
     */
-  sConfig.Channel = ADC_CHANNEL_15;
-  sConfig.Rank = 2;
+  sConfig.Channel = ADC_CHANNEL_14;
+  sConfig.Rank = 1;
   sConfig.SamplingTime = ADC_SAMPLETIME_56CYCLES;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
     /**Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
     */
-  sConfig.Channel = ADC_CHANNEL_14;
-  sConfig.Rank = 1;
+  sConfig.Channel = ADC_CHANNEL_15;
+  sConfig.Rank = 2;
   HAL_ADC_ConfigChannel(&hadc1, &sConfig);
 
 }
@@ -150,9 +150,6 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
     hdma_adc1.Init.Mode = DMA_CIRCULAR;
     hdma_adc1.Init.Priority = DMA_PRIORITY_HIGH;
     hdma_adc1.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    hdma_adc1.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_HALFFULL;
-    hdma_adc1.Init.MemBurst = DMA_MBURST_SINGLE;
-    hdma_adc1.Init.PeriphBurst = DMA_PBURST_SINGLE;
     HAL_DMA_Init(&hdma_adc1);
 
     __HAL_LINKDMA(hadc,DMA_Handle,hdma_adc1);

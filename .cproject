@@ -14,7 +14,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="${cross_rm} -rf" description="" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.2137898205" name="Debug" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="${cross_rm} -rf" description="" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.2137898205" name="Debug" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug">
 					<folderInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.2137898205." name="/" resourcePath="">
 						<toolChain id="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.debug.1433590283" name="Cross ARM GCC" superClass="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.debug">
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.1152374098" name="Optimization Level" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level" value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.none" valueType="enumerated"/>
@@ -154,7 +154,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="BSP"/>
-						<entry excluding="portable/MemMang/heap_4.c|portable/MemMang/heap_3.c|portable/MemMang/heap_2.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="FreeRTOS"/>
+						<entry excluding="portable/MemMang/heap_5.c|portable/MemMang/heap_4.c|portable/MemMang/heap_3.c|portable/MemMang/heap_2.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="FreeRTOS"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry excluding="Src/newlib/assert.c|Src/stm32f4-hal/stm32f4xx_hal_can.c|Src/stm32f4-hal/stm32f4xx_hal_crc.c|Src/stm32f4-hal/stm32f4xx_hal_cryp.c|Src/stm32f4-hal/stm32f4xx_hal_cryp_ex.c|Src/stm32f4-hal/stm32f4xx_hal_dac.c|Src/stm32f4-hal/stm32f4xx_hal_dac_ex.c|Src/stm32f4-hal/stm32f4xx_hal_dcmi.c|Src/stm32f4-hal/stm32f4xx_hal_dma2d.c|Src/stm32f4-hal/stm32f4xx_hal_dma_ex.c|Src/stm32f4-hal/stm32f4xx_hal_eth.c|Src/stm32f4-hal/stm32f4xx_hal_hash.c|Src/stm32f4-hal/stm32f4xx_hal_hash_ex.c|Src/stm32f4-hal/stm32f4xx_hal_hcd.c|Src/stm32f4-hal/stm32f4xx_hal_i2c_ex.c|Src/stm32f4-hal/stm32f4xx_hal_i2s.c|Src/stm32f4-hal/stm32f4xx_hal_i2s_ex.c|Src/stm32f4-hal/stm32f4xx_hal_irda.c|Src/stm32f4-hal/stm32f4xx_hal_ltdc.c|Src/stm32f4-hal/stm32f4xx_hal_msp_template.c|Src/stm32f4-hal/stm32f4xx_hal_nand.c|Src/stm32f4-hal/stm32f4xx_hal_nor.c|Src/stm32f4-hal/stm32f4xx_hal_pccard.c|Src/stm32f4-hal/stm32f4xx_hal_pcd.c|Src/stm32f4-hal/stm32f4xx_hal_rng.c|Src/stm32f4-hal/stm32f4xx_hal_rtc.c|Src/stm32f4-hal/stm32f4xx_hal_rtc_ex.c|Src/stm32f4-hal/stm32f4xx_hal_sai.c|Src/stm32f4-hal/stm32f4xx_hal_sd.c|Src/stm32f4-hal/stm32f4xx_hal_sdram.c|Src/stm32f4-hal/stm32f4xx_hal_smartcard.c|Src/stm32f4-hal/stm32f4xx_hal_sram.c|Src/stm32f4-hal/stm32f4xx_hal_usart.c|Src/stm32f4-hal/stm32f4xx_hal_wwdg.c|Src/stm32f4-hal/stm32f4xx_ll_fmc.c|Src/stm32f4-hal/stm32f4xx_ll_fsmc.c|Src/stm32f4-hal/stm32f4xx_ll_sdmmc.c|Src/stm32f4-hal/stm32f4xx_ll_usb.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="system"/>
 					</sourceEntries>
@@ -175,7 +175,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="${cross_rm} -rf" description="" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1808230883" name="Release" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="${cross_rm} -rf" description="" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1808230883" name="Release" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release">
 					<folderInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1808230883." name="/" resourcePath="">
 						<toolChain id="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.release.261242432" name="Cross ARM GCC" superClass="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.release">
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.1815943952" name="Optimization Level" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level" value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.size" valueType="enumerated"/>
@@ -303,7 +303,7 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="BSP"/>
-						<entry excluding="portable/MemMang/heap_4.c|portable/MemMang/heap_3.c|portable/MemMang/heap_2.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="FreeRTOS"/>
+						<entry excluding="portable/MemMang/heap_5.c|portable/MemMang/heap_4.c|portable/MemMang/heap_3.c|portable/MemMang/heap_2.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="FreeRTOS"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry excluding="Src/newlib/assert.c|Src/stm32f4-hal/stm32f4xx_hal_can.c|Src/stm32f4-hal/stm32f4xx_hal_crc.c|Src/stm32f4-hal/stm32f4xx_hal_cryp.c|Src/stm32f4-hal/stm32f4xx_hal_cryp_ex.c|Src/stm32f4-hal/stm32f4xx_hal_dac.c|Src/stm32f4-hal/stm32f4xx_hal_dac_ex.c|Src/stm32f4-hal/stm32f4xx_hal_dcmi.c|Src/stm32f4-hal/stm32f4xx_hal_dma2d.c|Src/stm32f4-hal/stm32f4xx_hal_dma_ex.c|Src/stm32f4-hal/stm32f4xx_hal_eth.c|Src/stm32f4-hal/stm32f4xx_hal_hash.c|Src/stm32f4-hal/stm32f4xx_hal_hash_ex.c|Src/stm32f4-hal/stm32f4xx_hal_hcd.c|Src/stm32f4-hal/stm32f4xx_hal_i2c_ex.c|Src/stm32f4-hal/stm32f4xx_hal_i2s.c|Src/stm32f4-hal/stm32f4xx_hal_i2s_ex.c|Src/stm32f4-hal/stm32f4xx_hal_irda.c|Src/stm32f4-hal/stm32f4xx_hal_ltdc.c|Src/stm32f4-hal/stm32f4xx_hal_msp_template.c|Src/stm32f4-hal/stm32f4xx_hal_nand.c|Src/stm32f4-hal/stm32f4xx_hal_nor.c|Src/stm32f4-hal/stm32f4xx_hal_pccard.c|Src/stm32f4-hal/stm32f4xx_hal_pcd.c|Src/stm32f4-hal/stm32f4xx_hal_rng.c|Src/stm32f4-hal/stm32f4xx_hal_rtc.c|Src/stm32f4-hal/stm32f4xx_hal_rtc_ex.c|Src/stm32f4-hal/stm32f4xx_hal_sai.c|Src/stm32f4-hal/stm32f4xx_hal_sd.c|Src/stm32f4-hal/stm32f4xx_hal_sdram.c|Src/stm32f4-hal/stm32f4xx_hal_smartcard.c|Src/stm32f4-hal/stm32f4xx_hal_sram.c|Src/stm32f4-hal/stm32f4xx_hal_usart.c|Src/stm32f4-hal/stm32f4xx_hal_wwdg.c|Src/stm32f4-hal/stm32f4xx_ll_fmc.c|Src/stm32f4-hal/stm32f4xx_ll_fsmc.c|Src/stm32f4-hal/stm32f4xx_ll_sdmmc.c|Src/stm32f4-hal/stm32f4xx_ll_usb.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="system"/>
 					</sourceEntries>
@@ -319,25 +319,13 @@
 	<storageModule moduleId="refreshScope"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1533645400;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1533645400.;ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.1255495411;ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.input.1089316183">
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.2137898205;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.2137898205.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1033220909;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.610377067">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1533645400;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.1533645400.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1646723520;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1109298492">
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.2137898205;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.2137898205.;ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.934073835;ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.input.873499841">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.440655455;ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.440655455.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.723352132;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1708315701">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1315316170;ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1315316170.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.736688229;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.189308111">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.718391930;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.718391930.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.1606898834;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.365265770">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1315316170;ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1315316170.;ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.662861421;ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.input.1134419536">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.718391930;ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.718391930.;ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.1610836387;ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.input.2013662017">
+		<scannerConfigBuildInfo instanceId="ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1808230883;ilg.gnuarmeclipse.managedbuild.cross.config.elf.release.1808230883.;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.501552881;ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.690987010">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 		</scannerConfigBuildInfo>
 	</storageModule>

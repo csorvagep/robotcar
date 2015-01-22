@@ -18,7 +18,7 @@
 #define MIN_OUTPUT				-450
 
 #define ZD 						0.98145f
-#define KC						1.9f //2.4851f //Tcl = 500ms
+#define KC						1.5f //2.4851f //Tcl = 500ms
 
 #define RC_FORWARD_TRESHOLD		25
 #define RC_1_MOTOR_MAX			0.002f

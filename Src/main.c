@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
   * File Name          : main.c
-  * Date               : 21/11/2014 22:42:58
+  * Date               : 22/01/2015 14:49:37
   * Description        : Main program body
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2014 STMicroelectronics
+  * COPYRIGHT(c) 2015 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -66,7 +66,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void StartThread(void const * argument);
+void MX_FREERTOS_Init(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -117,34 +117,16 @@ int main(void)
 	BSP_Radio_ConnectServo(ENABLE);
 	BSP_Radio_ServoStatus(ENABLE);
 	//HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
-
-	/* Analog sensors (battery) */
-	osThreadDef(ANALOG_Thread, AnalogThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
-	osThreadCreate(osThread(ANALOG_Thread), NULL);
-
-	/* Communication thread */
-	osThreadDef(COMM_Thread, CommThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 128);
-	osThreadCreate(osThread(COMM_Thread), NULL);
-
-	/* Motor controller thread */
-	osThreadDef(MOTOR_Thread, MotorThread, osPriorityAboveNormal, 0, configMINIMAL_STACK_SIZE + 48);
-	osThreadCreate(osThread(MOTOR_Thread), NULL);
-
-	/* Dead-reckoning */
-	osThreadDef(DR_Thread, DeadReckoningThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 128);
-	osThreadCreate(osThread(DR_Thread), NULL);
-
   /* USER CODE END 2 */
 
-  /* Init code generated for FreeRTOS */
-  /* Create Start thread */
-  osThreadDef(USER_Thread, StartThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
-  osThreadCreate (osThread(USER_Thread), NULL);
+  /* Call init function for freertos objects (in freertos.c) */
+  MX_FREERTOS_Init();
 
   /* Start scheduler */
-  osKernelStart(NULL, NULL);
-
+  osKernelStart();
+  
   /* We should never get here as control is now taken by the scheduler */
+  
 
   /* USER CODE BEGIN 3 */
 	/* Infinite loop */
@@ -200,7 +182,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin __attribute__((unused))) {
 }
 /* USER CODE END 4 */
 
-static void StartThread(void const * argument)
+void StartDefaultTask(void const * argument)
 {
 
   /* USER CODE BEGIN 5 */
@@ -215,6 +197,7 @@ static void StartThread(void const * argument)
   /* USER CODE END 5 */ 
 
 }
+ 
 
 #ifdef USE_FULL_ASSERT
 

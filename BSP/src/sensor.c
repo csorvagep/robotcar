@@ -15,8 +15,6 @@
 
 static uint32_t adcData[2];
 
-extern ADC_HandleTypeDef hadc1;
-
 void BSP_Sensor_Init(void) {
 	//HAL_ADC_Start_DMA(&hadc1, adcData, 2);
 }

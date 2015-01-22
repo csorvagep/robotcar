@@ -1,11 +1,11 @@
 /**
   ******************************************************************************
   * File Name          : freertos.c
-  * Date               : 21/11/2014 22:42:54
-  * Description        : Optional code that may be needed for compiling freertos applications
+  * Date               : 22/01/2015 14:49:34
+  * Description        : Code for freertos applications
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2014 STMicroelectronics
+  * COPYRIGHT(c) 2015 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -35,12 +35,33 @@
 /* Includes ------------------------------------------------------------------*/
 #include "FreeRTOS.h"
 #include "task.h"
-/* USER CODE BEGIN 0 */
-#include "stm32f4xx.h"
-/* USER CODE END 0 */
+#include "cmsis_os.h"
 
-void vApplicationStackOverflowHook(xTaskHandle xTask, signed char *pcTaskName);      
-void vApplicationMallocFailedHook(void);       
+/* USER CODE BEGIN Includes */     
+#include "stm32f4xx.h"
+
+#include "analog.h"
+#include "deadreckoning.h"
+#include "motorcontrol.h"
+#include "communication.h"
+/* USER CODE END Includes */
+
+/* Variables -----------------------------------------------------------------*/
+osThreadId defaultTaskHandle;
+
+/* USER CODE BEGIN Variables */
+
+/* USER CODE END Variables */
+
+/* Function prototypes -------------------------------------------------------*/
+void StartDefaultTask(void const * argument);
+
+/* USER CODE BEGIN FunctionPrototypes */
+
+/* USER CODE END FunctionPrototypes */
+/* Hook prototypes */
+void vApplicationStackOverflowHook(xTaskHandle xTask, signed char *pcTaskName);
+void vApplicationMallocFailedHook(void);
 
 /* USER CODE BEGIN 4 */
 void vApplicationStackOverflowHook(xTaskHandle xTask, signed char *pcTaskName) {
@@ -78,5 +99,56 @@ void vApplicationMallocFailedHook(void) {
 	}
 }
 /* USER CODE END 5 */
+
+/* Init FreeRTOS */
+
+void MX_FREERTOS_Init() {
+  /* USER CODE BEGIN Init */
+       
+  /* USER CODE END Init */
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+
+  /* Create the thread(s) */
+  /* definition and creation of defaultTask */
+  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+	/* Analog sensors (battery) */
+	osThreadDef(ANALOG_Thread, AnalogThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
+	osThreadCreate(osThread(ANALOG_Thread), NULL);
+
+	/* Communication thread */
+	osThreadDef(COMM_Thread, CommThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 128);
+	osThreadCreate(osThread(COMM_Thread), NULL);
+
+	/* Motor controller thread */
+	osThreadDef(MOTOR_Thread, MotorThread, osPriorityAboveNormal, 0, configMINIMAL_STACK_SIZE + 48);
+	osThreadCreate(osThread(MOTOR_Thread), NULL);
+
+	/* Dead-reckoning */
+	osThreadDef(DR_Thread, DeadReckoningThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 128);
+	osThreadCreate(osThread(DR_Thread), NULL);
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+}
+
+/* USER CODE BEGIN Application */
+     
+/* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

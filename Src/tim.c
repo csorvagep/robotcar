@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
   * File Name          : TIM.c
-  * Date               : 16/11/2014 15:16:34
+  * Date               : 22/01/2015 14:49:35
   * Description        : This file provides code for the configuration
   *                      of the TIM instances.
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2014 STMicroelectronics
+  * COPYRIGHT(c) 2015 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -56,9 +56,9 @@ void MX_TIM1_Init(void)
   TIM_OC_InitTypeDef sConfigOC;
 
   htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 16;
+  htim1.Init.Prescaler = 7;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 499;
+  htim1.Init.Period = 999;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   HAL_TIM_PWM_Init(&htim1);

@@ -10,8 +10,8 @@
 
 #include "stm32f4xx.h"
 
-#define SPEED_MAX		185
-#define MIDDLE_VAL		250
+#define SPEED_MAX		490
+#define MIDDLE_VAL		500
 
 void BSP_Motor_Init(void);
 void BSP_Motor_SetSpeed(int32_t value);
