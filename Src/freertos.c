@@ -40,7 +40,6 @@
 /* USER CODE BEGIN Includes */     
 #include "stm32f4xx.h"
 
-#include "analog.h"
 #include "deadreckoning.h"
 #include "motorcontrol.h"
 #include "communication.h"
@@ -126,8 +125,8 @@ void MX_FREERTOS_Init() {
 
   /* USER CODE BEGIN RTOS_THREADS */
 	/* Analog sensors (battery) */
-	osThreadDef(ANALOG_Thread, AnalogThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
-	osThreadCreate(osThread(ANALOG_Thread), NULL);
+	//osThreadDef(ANALOG_Thread, AnalogThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE);
+	//osThreadCreate(osThread(ANALOG_Thread), NULL);
 
 	/* Communication thread */
 	osThreadDef(COMM_Thread, CommThread, osPriorityNormal, 0, configMINIMAL_STACK_SIZE + 128);
