@@ -19,6 +19,7 @@ static volatile FunctionalState printBatteryState = DISABLE;
 static volatile FunctionalState printLineState = DISABLE;
 
 static float linePos = 0.0f;
+static float prevLinePos = 0.0f;
 osSemaphoreId posMutex = NULL;
 static uint8_t blackLimit = 100;
 
@@ -56,10 +57,12 @@ void AnalogThread(void const * argument __attribute__((unused))) {
 			}
 		}
 
-		if (osMutexWait(posMutex, 1)) {
+		if(blackSum == 0) {
+			linePos = prevLinePos;
+		} else {
 			linePos = SENSOR_DIST_MM * ((blackSum / (float) blackCount) - 11.5f);
-			osMutexRelease(posMutex);
 		}
+		prevLinePos = linePos;
 
 		if (++printCount >= 10) {
 			printCount = 0;
@@ -98,11 +101,11 @@ void setPrintLine(char state) {
 }
 
 float getLinePos() {
-	float retval;
-	if (osMutexWait(posMutex, 1)) {
+	float retval = 0.0f;
+	//if (osMutexWait(posMutex, 3)) {
 		retval = linePos;
-		osMutexRelease(posMutex);
-	}
+	//	osMutexRelease(posMutex);
+	//}
 	return retval;
 }
 

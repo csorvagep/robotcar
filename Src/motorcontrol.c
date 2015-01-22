@@ -11,6 +11,7 @@
 #include "encoder.h"
 #include "radio.h"
 #include "communication.h"
+#include "analog.h"
 
 #include <stdio.h>
 
@@ -75,6 +76,7 @@ void MotorThread(void const * argument __attribute__((unused)))
 			} else {
 				state = mcOff;
 				BSP_Motor_SetState(DISABLE);
+				//BSP_Radio_ConnectServo(DISABLE);
 				BSP_Motor_SetSpeed(0);
 			}
 			prevRemoteState = remoteControllerState;
@@ -84,7 +86,7 @@ void MotorThread(void const * argument __attribute__((unused)))
 			case rcInit:
 				BSP_Motor_SetSpeed(0);
 				BSP_Motor_SetState(DISABLE);
-				BSP_Radio_ConnectServo(ENABLE);
+				//BSP_Radio_ConnectServo(ENABLE);
 				state = rcStop;
 				prevMotor = 0;
 				break;
@@ -175,10 +177,15 @@ void MotorThread(void const * argument __attribute__((unused)))
 		}
 
 		u = calculateU(uk);
-		BSP_Motor_SetSpeed(u);
+		//BSP_Motor_SetSpeed(u);
+		BSP_Motor_SetSpeed(motor >> 2);
 
-		if(!remoteControllerState)
+		if(!remoteControllerState) {
 			BSP_Radio_SetPhi(refPhi);
+		} else {
+			float linePos = getLinePos();
+			BSP_Radio_SetPhi(linePos * -0.003f);
+		}
 
 		if(++i > 5) {
 			if(printState == ENABLE) {
