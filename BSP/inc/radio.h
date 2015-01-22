@@ -10,17 +10,9 @@
 
 #include "stm32f4xx.h"
 
-#define CAR_NUMBER			2
-
-#if CAR_NUMBER==1
-	#define SERVO_MAX			570
-	#define SERVO_MIN			-250
-	#define SERVO_OFFSET		160
-#elif CAR_NUMBER == 2
-	#define SERVO_MAX			440
-	#define SERVO_MIN			-320
-	#define SERVO_OFFSET		0
-#endif
+#define SERVO_MAX			570
+#define SERVO_MIN			-250
+#define SERVO_OFFSET		160
 
 #define RADIO_MOTOR_MAX		500
 
