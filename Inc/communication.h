@@ -11,7 +11,7 @@
 #include "stm32f4xx.h"
 #include "cmsis_os.h"
 
-#define USE_SPP 	1
+#define USE_SPP 	0
 
 void CommThread(void const * argument);
 void SendChars(const char * str, size_t len);

@@ -11,7 +11,6 @@
 #include <string.h>
 #include "motorcontrol.h"
 #include "deadreckoning.h"
-#include "analog.h"
 
 static osMutexId sendMutex = NULL;
 static const char connectString[] = "AT+AB SPPConnect 000272cfc2e7\r\n";
@@ -105,9 +104,9 @@ void ProcessCommand(void) {
 		ProcessATAB();
 		internalBuffer[0] = '\0';
 		break;
-	case 'B':
-		setPrintBattery(internalBuffer[2]);
-		break;
+//	case 'B':
+//		setPrintBattery(internalBuffer[2]);
+//		break;
 	case 'C':
 		setPrintConfig(internalBuffer[2]);
 		break;
@@ -121,9 +120,9 @@ void ProcessCommand(void) {
 		setPhi(y);
 		printConfig();
 		break;
-	case 'L':
-		setPrintLine(internalBuffer[2]);
-		break;
+//	case 'L':
+//		setPrintLine(internalBuffer[2]);
+//		break;
 	case 'M':
 		setPrintMotor(internalBuffer[2]);
 		break;
