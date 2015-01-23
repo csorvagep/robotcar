@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
   * File Name          : SPI.c
-  * Date               : 21/11/2014 22:42:55
+  * Date               : 22/01/2015 18:45:03
   * Description        : This file provides code for the configuration
   *                      of the SPI instances.
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2014 STMicroelectronics
+  * COPYRIGHT(c) 2015 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -58,7 +58,7 @@ void MX_SPI2_Init(void)
   hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi2.Init.TIMode = SPI_TIMODE_DISABLED;
-  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLED;
+  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
   hspi2.Init.CRCPolynomial = 10;
   HAL_SPI_Init(&hspi2);
 

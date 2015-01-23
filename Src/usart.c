@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
   * File Name          : USART.c
-  * Date               : 21/11/2014 22:42:56
+  * Date               : 22/01/2015 18:40:24
   * Description        : This file provides code for the configuration
   *                      of the USART instances.
   ******************************************************************************
   *
-  * COPYRIGHT(c) 2014 STMicroelectronics
+  * COPYRIGHT(c) 2015 STMicroelectronics
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -116,13 +116,13 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     hdma_usart3_rx.Init.Mode = DMA_CIRCULAR;
     hdma_usart3_rx.Init.Priority = DMA_PRIORITY_HIGH;
     hdma_usart3_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-    hdma_usart3_rx.Init.FIFOThreshold = DMA_FIFO_THRESHOLD_HALFFULL;
-    hdma_usart3_rx.Init.MemBurst = DMA_MBURST_SINGLE;
-    hdma_usart3_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
     HAL_DMA_Init(&hdma_usart3_rx);
 
     __HAL_LINKDMA(huart,hdmarx,hdma_usart3_rx);
 
+    /* Peripheral interrupt init*/
+    HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(USART3_IRQn);
   /* USER CODE BEGIN USART3_MspInit 1 */
 
   /* USER CODE END USART3_MspInit 1 */
@@ -149,6 +149,10 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
     /* Peripheral DMA DeInit*/
     HAL_DMA_DeInit(huart->hdmatx);
     HAL_DMA_DeInit(huart->hdmarx);
+
+    /* Peripheral interrupt Deinit*/
+    HAL_NVIC_DisableIRQ(USART3_IRQn);
+
   /* USER CODE BEGIN USART3_MspDeInit 1 */
 
   /* USER CODE END USART3_MspDeInit 1 */

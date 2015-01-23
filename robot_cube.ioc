@@ -1,5 +1,5 @@
 #MicroXplorer Configuration settings - do not modify
-#Thu Jan 22 17:26:02 CET 2015
+#Thu Jan 22 18:45:01 CET 2015
 ADC1.Channel=ADC_CHANNEL_14
 ADC1.Channel-10\#ChannelRegularConversion=ADC_CHANNEL_15
 ADC1.Channel-7\#ChannelRegularConversion=ADC_CHANNEL_14
@@ -22,7 +22,7 @@ ADC2.Channel-0\#ChannelRegularConversion=ADC_CHANNEL_9
 ADC2.Channel-3\#ChannelRegularConversion=ADC_CHANNEL_8
 ADC2.Channel-IN9=ADC_CHANNEL_9
 ADC2.DMAContinuousRequests=ENABLE
-ADC2.IPParameters=Channel-IN9,Channel-0\#ChannelRegularConversion,Channel,NbrOfConversion,SamplingTime-3\#ChannelRegularConversion,ScanConvMode,SamplingTime-0\#ChannelRegularConversion,Rank-3\#ChannelRegularConversion,DMAContinuousRequests,Channel-3\#ChannelRegularConversion,Resolution
+ADC2.IPParameters=Channel-0\#ChannelRegularConversion,Channel-IN9,Channel,NbrOfConversion,SamplingTime-3\#ChannelRegularConversion,ScanConvMode,SamplingTime-0\#ChannelRegularConversion,Rank-3\#ChannelRegularConversion,DMAContinuousRequests,Channel-3\#ChannelRegularConversion,Resolution
 ADC2.NbrOfConversion=2
 ADC2.Rank-3\#ChannelRegularConversion=2
 ADC2.Resolution=ADC_RESOLUTION12b
@@ -146,6 +146,7 @@ NVIC.SPI2_IRQn=true\:5\:0\:true
 NVIC.SysTick_IRQn=true\:5\:0\:true
 NVIC.TIM4_IRQn=true\:5\:0\:true
 NVIC.TIM6_DAC_IRQn=true\:5\:0\:true
+NVIC.USART3_IRQn=true\:5\:0\:false
 PA0-WKUP.GPIOParameters=GPIO_PuPd,GPIO_ModeDefaultEXTI
 PA0-WKUP.GPIO_ModeDefaultEXTI=GPIO_MODE_IT_RISING
 PA0-WKUP.GPIO_PuPd=GPIO_NOPULL
@@ -334,7 +335,7 @@ RCC.HCLKFreq_Value=168000000
 RCC.HSE_VALUE=8000000
 RCC.HSI_VALUE=16000000
 RCC.I2SClocksFreq_Value=96000000
-RCC.IPParameters=LSI_VALUE,APB1TimFreq_Value,MCO2PinFreq_Value,APB2Freq_Value,APB1CLKDivider,FCLKCortexFreq_Value,AHBFreq_Value,48MHZClocksFreq_Value,VCOInputFreq_Value,PLLSourceVirtual,I2SClocksFreq_Value,SYSCLKFreq_VALUE,PLLQ,SYSCLKSource,LSE_VALUE,HSE_VALUE,HSI_VALUE,VCOI2SOutputFreq_Value,PLLCLKFreq_Value,RTCFreq_Value,FamilyName,HCLKFreq_Value,EthernetFreq_Value,APB2CLKDivider,PLLM,PLLN,VCOOutputFreq_Value,CortexFreq_Value,VcooutputI2S,APB1Freq_Value,RTCHSEDivFreq_Value,APB2TimFreq_Value
+RCC.IPParameters=LSI_VALUE,APB1TimFreq_Value,MCO2PinFreq_Value,APB2Freq_Value,APB1CLKDivider,FCLKCortexFreq_Value,48MHZClocksFreq_Value,AHBFreq_Value,VCOInputFreq_Value,I2SClocksFreq_Value,PLLSourceVirtual,SYSCLKFreq_VALUE,PLLQ,SYSCLKSource,LSE_VALUE,HSE_VALUE,HSI_VALUE,VCOI2SOutputFreq_Value,PLLCLKFreq_Value,RTCFreq_Value,FamilyName,HCLKFreq_Value,EthernetFreq_Value,APB2CLKDivider,PLLM,PLLN,VCOOutputFreq_Value,CortexFreq_Value,VcooutputI2S,APB1Freq_Value,RTCHSEDivFreq_Value,APB2TimFreq_Value
 RCC.LSE_VALUE=32768
 RCC.LSI_VALUE=32000
 RCC.MCO2PinFreq_Value=168000000
@@ -405,7 +406,7 @@ TIM4.ICPolarity_CH3-Input_Capture3_from_TI3=TIM_INPUTCHANNELPOLARITY_FALLING
 TIM4.ICSelection-Input_Capture1_from_TI2=TIM_ICSELECTION_INDIRECTTI
 TIM4.ICSelection-Input_Capture2_from_TI2=TIM_ICSELECTION_DIRECTTI
 TIM4.ICSelection-Input_Capture3_from_TI3=TIM_ICSELECTION_DIRECTTI
-TIM4.IPParameters=Channel-Input_Capture2_from_TI2,ICSelection-Input_Capture3_from_TI3,Pulse-PWM Generation4 CH4,ICSelection-Input_Capture2_from_TI2,Period,Channel-PWM Generation4 CH4,ICPolarity_CH3-Input_Capture3_from_TI3,ICSelection-Input_Capture1_from_TI2,Prescaler,TIM_SlaveMode-TriggerSource_TI2FP2,OCFastMode_PWM-PWM Generation4 CH4,Channel-Input_Capture3_from_TI3,ICPolarity_CH1-Input_Capture1_from_TI2
+TIM4.IPParameters=Channel-Input_Capture2_from_TI2,Pulse-PWM Generation4 CH4,ICSelection-Input_Capture3_from_TI3,ICSelection-Input_Capture2_from_TI2,Period,Channel-PWM Generation4 CH4,ICPolarity_CH3-Input_Capture3_from_TI3,ICSelection-Input_Capture1_from_TI2,Prescaler,TIM_SlaveMode-TriggerSource_TI2FP2,OCFastMode_PWM-PWM Generation4 CH4,Channel-Input_Capture3_from_TI3,ICPolarity_CH1-Input_Capture1_from_TI2
 TIM4.OCFastMode_PWM-PWM\ Generation4\ CH4=TIM_OCFAST_DISABLE
 TIM4.Period=65535
 TIM4.Prescaler=83

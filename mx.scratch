@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+<ProjectName>D:\code\eclipse\robot_cube\\robot_cube</ProjectName>
+<CMSIS>C:\Users\G&#225;bor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers\CMSIS</CMSIS>  
+<Toolchain>TrueSTUDIO</Toolchain>
+<Version>0</Version>
+
+<filestoremove>
+	<file>
+	</file>
+</filestoremove>
+
+<inctoremove>
+	<Aincludes>
+	   <include></include>
+    </Aincludes>
+	<Cincludes>
+    </Cincludes>
+</inctoremove>
+
+
+<configs>
+  <config>
+    <name>robot_cube Configuration</name>				
+    <device>STM32F407VGTx</device>		     <debugprobe></debugprobe>
+    <optimization></optimization>
+    <Adefines>
+       <define></define>
+    </Adefines>
+    <UsedFreeRTOS>true</UsedFreeRTOS>
+    <Aincludes>
+	   			<include>..\..\..\Inc</include>
+    </Aincludes>
+	<Cdefines>
+       <include>__weak=__attribute__((weak))</include>
+       <include>__packed=__attribute__((__packed__))</include>
+    </Cdefines>
+	<Cincludes>
+	 <include>..\Inc</include>
+	   <include>C:\Users\G&#225;bor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers\STM32F4xx_HAL_Driver\Inc</include>
+	   <include>C:\Users\G&#225;bor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy</include>
+	   <include>C:\Users\G&#225;bor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares\Third_Party\FreeRTOS\Source\portable\GCC\ARM_CM4F</include>
+	   <include>C:\Users\G&#225;bor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares\Third_Party\FreeRTOS\Source\include</include>
+	   <include>C:\Users\G&#225;bor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS</include>
+	   <include>C:\Users\G&#225;bor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers\CMSIS\Include</include>
+	   <include>C:\Users\G&#225;bor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include</include>
+    </Cincludes>
+  </config>
+</configs>
+
+  <group>
+  <name>Middlewares</name>
+	 	<group>
+	 		<name>FreeRTOS</name>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_1.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares/Third_Party/FreeRTOS/Source/croutine.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares/Third_Party/FreeRTOS/Source/event_groups.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares/Third_Party/FreeRTOS/Source/list.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares/Third_Party/FreeRTOS/Source/queue.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares/Third_Party/FreeRTOS/Source/tasks.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares/Third_Party/FreeRTOS/Source/timers.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c</name>
+					</file>
+	    </group>
+  </group> 
+ 
+   <group>
+    <name>Drivers</name> 
+	   <group>
+	 		<name>STM32F4xx_HAL_Driver</name>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_adc_ex.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c</name>
+					</file>
+					<file>
+						<name>C:\Users\Gábor\STM32Cube\Repository\STM32Cube_FW_F4_V1.4.0\Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c</name>
+					</file>
+	    </group>
+  </group>   
+  
+  <group>
+  <name>Application</name>
+    <group>
+      <name>User</name>  
+        <file>
+         <name>../Src/main.c</name>
+        </file>
+        <file>
+         <name>../Src/gpio.c</name>
+        </file>
+        <file>
+         <name>../Src/adc.c</name>
+        </file>
+        <file>
+         <name>../Src/dma.c</name>
+        </file>
+        <file>
+         <name>../Src/freertos.c</name>
+        </file>
+        <file>
+         <name>../Src/i2c.c</name>
+        </file>
+        <file>
+         <name>../Src/spi.c</name>
+        </file>
+        <file>
+         <name>../Src/tim.c</name>
+        </file>
+        <file>
+         <name>../Src/usart.c</name>
+        </file>
+        <file>
+         <name>../Src/stm32f4xx_it.c</name>
+        </file>
+        <file>
+         <name>../Src/stm32f4xx_hal_msp.c</name>
+        </file>
+    </group>
+  </group>
+  
+</Project>
