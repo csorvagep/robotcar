@@ -133,7 +133,7 @@ void MX_FREERTOS_Init() {
 	osThreadCreate(osThread(COMM_Thread), NULL);
 
 	/* Motor controller thread */
-	osThreadDef(MOTOR_Thread, MotorThread, osPriorityAboveNormal, 0, configMINIMAL_STACK_SIZE + 48);
+	osThreadDef(MOTOR_Thread, MotorThread, osPriorityAboveNormal, 0, configMINIMAL_STACK_SIZE + 128);
 	osThreadCreate(osThread(MOTOR_Thread), NULL);
 
 	/* Dead-reckoning */

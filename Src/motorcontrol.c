@@ -19,7 +19,7 @@
 #define MIN_OUTPUT				-5100
 
 #define ZD 						0.9832f
-#define KC						1.2438f //Tcl = 500ms
+#define KC						1.7f //1.2438f //Tcl = 500ms
 
 #define ZERO_TRESHOLD			8
 #define RC_FORWARD_TRESHOLD		25
@@ -50,10 +50,11 @@ void MotorThread(void const * argument __attribute__((unused))) {
 
 	/* Common variables */
 	uint32_t previousWakeTime = osKernelSysTick();
-	uint32_t i = 0;
-	char outputBuffer[32];
+	char outputBuffer[64];
 	FunctionalState prevRemoteState = remoteControllerState;
 	float v = 0.0f;
+	int16_t velocities[4] = {0};
+	uint8_t veloIndex = 0;
 
 	/* MotorControl-Mode variables */
 	float ek = 0, uc1 = 0, uc2 = 0, uc = 0;
@@ -164,11 +165,26 @@ void MotorThread(void const * argument __attribute__((unused))) {
 		/* MotorControl */
 		float incrRef = v * INCR_PER_METER * TIME_STEP;
 
-		int16_t encoderVelo = BSP_Encoder_GetVelocity();
+		velocities[veloIndex++] = BSP_Encoder_GetVelocity();
+		if(veloIndex >= 4)
+			veloIndex = 0;
+
+
+		int16_t encoderVelo;
+		for(uint8_t i = 0; i< 4; i++)
+			encoderVelo += velocities[i];
+		encoderVelo >>= 2;
 
 		ek = incrRef - encoderVelo;
 		uc2 = uc2 * ZD + (1 - ZD) * uk;
-		uc1 = KC * ek;
+
+		/* Kotyogás */
+		//if(v < 0.2f && v > -0.2f) {
+		//	uc1 = KC * 0.3f * ek;
+		//} else {
+			uc1 = KC * ek;
+		//}
+
 		uc = uc1 + uc2;
 		if (uc > MAX_OUTPUT) {
 			uk = MAX_OUTPUT;
@@ -185,12 +201,12 @@ void MotorThread(void const * argument __attribute__((unused))) {
 			BSP_Radio_SetPhi(refPhi);
 		}
 
-		if (++i > 5) {
+		//if (++i > 5) {
 			if (printState == ENABLE) {
-				sprintf(outputBuffer, "M,%.3f,%.3f,%.3f\r\n", ek, uc1, uc2);
+				sprintf(outputBuffer, "M,%.2f,%.2f,%.2f,%d\r\n", ek, uc1, uc2, encoderVelo);
 				SendString(outputBuffer);
 			}
-		}
+		//}
 
 	}
 }
