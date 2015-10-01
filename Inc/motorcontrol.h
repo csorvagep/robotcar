@@ -11,8 +11,11 @@
 #include "stm32f4xx.h"
 #include "cmsis_os.h"
 
-#define MAX_VELOCITY	3.5f
 #define MAX_PHI			0.35f
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 void setRemoteControllerState(FunctionalState state);
 FunctionalState getRemoteControllerState(void);
@@ -20,5 +23,9 @@ void MotorThread(void const * argument);
 void setVelocity(float velocity);
 void setPhi(float phi);
 void setPrintMotor(char state);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* MOTORCONTROL_H_ */
